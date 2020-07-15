@@ -3,7 +3,6 @@ const Contact = require('../models/contact_model')
 createContact = (req, res) => {
   const body = req.body
 
-  console.log(req)
   if(!body){
     return res.status(400).json({
       success: false,
@@ -11,7 +10,15 @@ createContact = (req, res) => {
     })
   }
 
-  const contact = new Contact(body)
+  const contact = new Contact({
+    nome: body.nome,
+    endereço: body.endereço,
+    cidade: body.cidade,
+    bairro: body.bairro,
+    valor_da_entrega: body.valor_da_entrega,
+    telefone: body.telefone,
+    celular: body.celular
+  })
 
   if(!contact){
     return res.status(400).json({
@@ -26,7 +33,8 @@ createContact = (req, res) => {
       return res.status(201).json({
         success: true,
         id: contact._id,
-        message: 'Contato criado com sucesso!'
+        message: 'Contato criado com sucesso!',
+        data: contact
       })
     })
     .catch(error => {
@@ -145,10 +153,26 @@ getContacts = async (req, res) => {
   }).catch(err => console.log(err))
 }
 
+deleteAll = async (req, res) => {
+  await Contact.deleteMany({nome: null}, (err, contacts) => {
+    if(err){
+      return res.status(400).json({
+        success: false,
+        error: err
+      })
+    } 
+    return res.status(200)    .json({
+      success: true,
+      data: null
+    })
+  })
+}
+
 module.exports = {
   createContact,
   updateContact,
   deleteContact,
   getContactById,
-  getContacts
+  getContacts,
+  deleteAll
 }
