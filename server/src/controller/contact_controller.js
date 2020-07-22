@@ -10,15 +10,7 @@ createContact = (req, res) => {
     })
   }
 
-  const contact = new Contact({
-    nome: body.nome,
-    endereço: body.endereço,
-    cidade: body.cidade,
-    bairro: body.bairro,
-    valor_da_entrega: body.valor_da_entrega,
-    telefone: body.telefone,
-    celular: body.celular
-  })
+  const contact = new Contact(body)
 
   if(!contact){
     return res.status(400).json({
@@ -33,8 +25,7 @@ createContact = (req, res) => {
       return res.status(201).json({
         success: true,
         id: contact._id,
-        message: 'Contato criado com sucesso!',
-        data: contact
+        message: 'Contato criado com sucesso!'
       })
     })
     .catch(error => {
@@ -53,39 +44,40 @@ updateContact = async (req, res) => {
       success: false,
       error: 'Você deve fornecer um contato para atualizar.'
     })
-  }
+  } else{
+      await Contact.findOne({ _id: req.params.id }, (err, contact) => {
+        if(err){
+          return res.status(404).json({
+            err,
+            message: 'Contato não encontrado!'
+          })
+        }
 
-  Contact.findOne({ _id: req.params.id }), (err, contact) => {
-    if(err){
-      return res.status(404).json({
-        err,
-        message: 'Contato não encontrado!'
+        contact.nome = body.nome
+        contact.endereco = body.endereco
+        contact.cidade = body.cidade
+        contact.bairro = body.bairro
+        contact.entrega = body.entrega
+        contact.telefone = body.telefone
+        contact.celular = body.celular
+
+        contact
+          .save()
+          .then(() => {
+            return res.status(200).json({
+              success: true,
+              id: contact._id,
+              message: 'Contato atualizado!'
+            })
+          })
+          .catch(error => {
+            return res.status(404).json({
+              error,
+              message: 'Falha ao atualizar o contato!'
+            })
+          })
       })
     }
-    contact.nome = body.nome
-    contact.endereço = body.endereço
-    contact.cidade = body.cidade
-    contact.bairro = body.bairro
-    contact.valor_da_entrega = body.valor_da_entrega
-    contact.telefone = body.telefone
-    contact.celular = body.celular
-
-    contact
-      .save()
-      .then(() => {
-        return res.status(200).json({
-          success: true,
-          id: contact._id,
-          message: 'Contato atualizado!'
-        })
-      })
-      .catch(error => {
-        return res.status(404).json({
-          error,
-          message: 'Falha ao atualizar o contato!'
-        })
-      })
-  }
 }
 
 deleteContact = async (req, res) => {
