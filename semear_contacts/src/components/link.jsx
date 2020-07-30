@@ -1,21 +1,21 @@
 import React from 'react';
-import { NavLink, LinkText } from '../assets/style/styles';
+import { CustomNavLink, LinkText } from '../assets/style/styles';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import '../assets/icon/icons';
 
 const Link = (props) =>{
   return(
-    <NavLink>
+    <CustomNavLink to={props.to}>
       <FontAwesomeIcon 
       icon={props.icon}
       style={{ 
-        color: props.color, 
-        fontSize: props.size
+        color: props.color
       }}/>
-      <LinkText style={{ color: props.color}}>
+      <LinkText 
+      style={{ color: props.color }}>
         { props.title }
       </LinkText>
-    </NavLink>
+    </CustomNavLink>
   )
 }
 

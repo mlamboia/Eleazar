@@ -8,9 +8,8 @@ const Logo = (props) =>{
     <CustomLogo>
       <FontAwesomeIcon 
       icon={props.icon}
-      style={{ 
-        color: props.color, 
-        fontSize: props.size 
+      style={{
+        color: props.color
       }}/>
       <LinkText>
         <LogoText>

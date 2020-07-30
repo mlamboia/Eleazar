@@ -1,20 +1,23 @@
 import styled from 'styled-components';
-import { Link }  from 'react-router-dom'
+import { NavLink }  from 'react-router-dom'
 
 const Container = styled.div
 `
-  position: fixed;
-  @media (max-width: 600px){
-    position: absolute;
-    bottom: 0;      
-  }
+  display: flex;
+  margin-left: 10vw;
+  justify-content: center
 `
 
 const Nav = styled.div
 `
+  position: fixed;
+  @media only screen and (max-width: 567px){
+    position: absolute;
+    bottom: 0;      
+  }
   background: #303030;
   height: 100vh;
-  @media(max-width: 600px){
+  @media only screen and (max-width: 567px){
     width: 100vw;
     height: auto;
     display: flex;
@@ -23,54 +26,92 @@ const Nav = styled.div
   }
 `
 
-const NavLink = styled(Link)
+const CustomNavLink = styled(NavLink)
 `
-  font-size: 2rem;
   display: flex;
   padding: 1rem;
-  height: 5rem;
-  width: 100%;
+  font-size: 3.5rem;
   filter: invert(50%);
-  &:focus, &:visited, &:link, &:active{
+  &:visited, &:link{
     text-decoration: none;
   }
-  &:hover{
-    filter: grayscale(30%) opacity(1);
+  &:hover, &.active{
+    filter: grayscale(30%);
     background: #151515;
+    filter: invert(0%);
   }
-  @media (max-width: 600px){
+  @media only screen and (max-width: 567px){
     justify-content: center;
+    font-size: 35px;
+  }
+  @media only screen and (max-height: 567px){
+    font-size: 25px
   }
 `
 
 const CustomLogo = styled.div
 ` 
-  font-size: 2rem;
   padding: 1rem;
-  font-weight: bold;
-  letter-spacing: 0.3ch;
-  color: white;
+  font-size: 4rem;
   display: flex;
   width: 100%;
-  @media(max-width: 600px){
+  @media(max-width: 567px){
     display: none
+  }
+  @media only screen and (max-height: 567px){
+    font-size: 25px
   }
 `
 
-const LogoText = styled.a
+const LogoText = styled.div
 `
+  font-size: 2rem;
+  font-weight: bold;
+  letter-spacing: 0.3ch;
+  color: white;
   display: inline;
-  filter: grayscale(100%) opacity(0.7);
+  filter: grayscale(100%);
 `
 
 const LinkText = styled.div
 `
   margin-left: 1rem;
+  font-size: 30px;
   display: none;
-  @media (min-width: 600px) {
+  @media only screen and (min-width: 567px) {
     ${Container}:hover & {
       display: block;
-      filter: grayscale(0%) opacity(1);
+      filter: invert(0%);
+      justify-content: flex-end;
+    }
+  }
+`
+
+const ReactTableStyle = styled.div`
+  padding: 1rem;
+
+  table {
+    border-spacing: 0;
+    border: 1px solid black;
+
+    tr {
+      :last-child {
+        td {
+          border-bottom: 0;
+        }
+      }
+    }
+
+    th,
+    td {
+      margin: 0;
+      padding: 0.5rem;
+      border-bottom: 1px solid black;
+      border-right: 1px solid black;
+
+      :last-child {
+        border-right: 0;
+      }
     }
   }
 `
@@ -78,8 +119,9 @@ const LinkText = styled.div
 export {
   Container,
   Nav,
-  NavLink,
+  CustomNavLink,
   CustomLogo,
   LogoText,
-  LinkText
+  LinkText,
+  ReactTableStyle
 }

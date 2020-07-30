@@ -2,17 +2,17 @@ import { library } from '@fortawesome/fontawesome-svg-core'
 import { 
   faSearch,
   faUserPlus,
-  faUserEdit,
   faDove,
-  faClipboard 
+  faUtensils,
+  faEdit
 } from '@fortawesome/free-solid-svg-icons'
 
 library.add(
   faSearch, 
   faUserPlus, 
-  faUserEdit, 
   faDove, 
-  faClipboard
+  faUtensils,
+  faEdit
 )
 
 export default library
