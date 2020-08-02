@@ -10,31 +10,32 @@ class Navbar extends Component {
     return (
       <Nav>
         <Logo
-        title={'SEMEAR GRILLHALL'}
+        label={'SEMEAR GRILLHALL'}
         icon={'dove'}
         color={'white'}
         />
         <Link 
+        exact={true}
         to={'/'}
-        title={'BUSCAR CONTATOS'}
+        label={'BUSCAR CONTATOS'}
         icon={'search'}
         color={'darkorchid'}
         />
         <Link
         to={'/add_contact'}
-        title={'ADICIONAR CONTATOS'}
+        label={'ADICIONAR CONTATOS'}
         icon={'user-plus'}
         color={'Brown'}
         />
         <Link
         to={'/menu'}
-        title={'CARDAPIO'}
+        label={'CARDAPIO'}
         icon={'edit'}
         color={'chocolate'}
         />
         <Link
         to={'/dishes'}
-        title={'PRATOS DO DIA'}
+        label={'PRATOS DO DIA'}
         icon={'utensils'}
         color={'DodgerBlue'}
         />

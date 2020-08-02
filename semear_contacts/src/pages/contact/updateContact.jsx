@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Container } from './index';
+import { Container } from '../index';
 
 class UpdateContact extends Component {
   render(){

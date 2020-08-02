@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { 
+  api,
   Container,
-  ReactTableStyle
-} from './index';
-import api from '../api/index'
+} from '../index';
+import { ReactTable } from '../index';
 
 class ListContacts extends Component {
   constructor(props){
@@ -56,11 +56,9 @@ class ListContacts extends Component {
       showTable = false
     }
 
-    console.log(contacts)
-
     return(
       <Container>
-
+        <ReactTable columns={columns} data={contacts}/>
       </Container>
     )
   }

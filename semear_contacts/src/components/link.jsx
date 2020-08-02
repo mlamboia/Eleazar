@@ -5,7 +5,9 @@ import '../assets/icon/icons';
 
 const Link = (props) =>{
   return(
-    <CustomNavLink to={props.to}>
+    <CustomNavLink 
+    to={props.to} 
+    exact={props.exact}>
       <FontAwesomeIcon 
       icon={props.icon}
       style={{ 
@@ -13,7 +15,7 @@ const Link = (props) =>{
       }}/>
       <LinkText 
       style={{ color: props.color }}>
-        { props.title }
+        { props.label }
       </LinkText>
     </CustomNavLink>
   )

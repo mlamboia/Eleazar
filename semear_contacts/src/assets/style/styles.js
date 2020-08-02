@@ -3,20 +3,28 @@ import { NavLink }  from 'react-router-dom'
 
 const Container = styled.div
 `
-  display: flex;
-  margin-left: 10vw;
-  justify-content: center
+  display: block;
+  max-width: 100%;
+  @media only screen and (min-width: 567px){
+    margin-left: 10%;
+    padding: 1rem
+  }
+  @media only screen and (min-width: 1400px){
+    margin-left: 5%;
+  }  
 `
 
 const Nav = styled.div
 `
   position: fixed;
+  z-index: 1;
+  width: minmax(5%, auto);
+  background: #303030;
+  height: 100vh;
   @media only screen and (max-width: 567px){
     position: absolute;
     bottom: 0;      
   }
-  background: #303030;
-  height: 100vh;
   @media only screen and (max-width: 567px){
     width: 100vw;
     height: auto;
@@ -79,40 +87,74 @@ const LinkText = styled.div
   font-size: 30px;
   display: none;
   @media only screen and (min-width: 567px) {
-    ${Container}:hover & {
+    ${Nav}:hover & {
       display: block;
       filter: invert(0%);
       justify-content: flex-end;
     }
   }
 `
+const TableWrap = styled.div
+`
+  display: block;
+  max-width: 100%;
+  overflow: auto;
+  scrollbar-width: thin;
+  border-bottom: 1px solid black;
+  &::-webkit-scrollbar {
+    height: 0.5rem;
+  }
+  
+  &::-webkit-scrollbar-track {
+    background: grey;
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background: black;
+  }
+`
 
 const ReactTableStyle = styled.div`
-  padding: 1rem;
-
   table {
+    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
     border-spacing: 0;
-    border: 1px solid black;
-
-    tr {
-      :last-child {
-        td {
-          border-bottom: 0;
-        }
-      }
+    
+    :last-child td {
+        border-bottom: 0;
     }
-
-    th,
+      
+    th {
+      padding-top: 12px;
+      padding-bottom: 12px;
+      text-align: center;
+      font-size: 20px;
+      background-color: #303030;
+      color: white;
+    }
+    
     td {
       margin: 0;
       padding: 0.5rem;
-      border-bottom: 1px solid black;
-      border-right: 1px solid black;
+      border: 1px solid #ddd;
+      width: 1%;
+      &.collapse {
+        width: 0.0000000001%;
+      }
 
       :last-child {
         border-right: 0;
       }
     }
+    tr:nth-child(even){
+      background-color: #f2f2f2;
+    }
+    tr:hover {
+      background-color: #ddd;
+    }
+
+
   }
 `
 
@@ -123,5 +165,6 @@ export {
   CustomLogo,
   LogoText,
   LinkText,
+  TableWrap,
   ReactTableStyle
 }

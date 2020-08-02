@@ -13,7 +13,7 @@ const Logo = (props) =>{
       }}/>
       <LinkText>
         <LogoText>
-          { props.title }
+          { props.label }
         </LogoText>
       </LinkText>
     </CustomLogo>
