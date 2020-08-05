@@ -1,150 +1,150 @@
-const Contact = require('../models/contact_model')
+const Deliverer = require('../models/deliverer_model')
 
-createContact = (req, res) => {
+createDeliverer = (req, res) => {
   const body = req.body
 
   if(!body){
     return res.status(400).json({
       success: false,
-      error: 'Você deve fornecer um contato.',
+      error: 'Você deve fornecer um entregador.',
     })
   }
 
-  const contact = new Contact(body)
+  const deliverer = new Deliverer(body)
 
-  if(!contact){
+  if(!deliverer){
     return res.status(400).json({
       success: false,
       error: err
     })
   }
 
-  contact
+  deliverer
     .save()
     .then(() => {
       return res.status(201).json({
         success: true,
-        id: contact._id,
-        message: 'Contato criado com sucesso!'
+        id: deliverer._id,
+        message: 'Entregador criado com sucesso!'
       })
     })
     .catch(err => {
       return res.status(400).json({
         error: err,
-        message: 'Falha ao criar um contato!'
+        message: 'Falha ao criar um entregador!'
       })
     })
 }
 
-updateContact = async (req, res) => {
+updateDeliverer = async (req, res) => {
   const body = req.body
 
   if(!body){
     return res.status(400).json({
       success: false,
-      error: 'Você deve fornecer um contato para atualizar.'
+      error: 'Você deve fornecer um entregador para atualizar.'
     })
   } else{
-      await Contact.findOne({ _id: req.params.id }, (err, contact) => {
+      await Deliverer.findOne({ _id: req.params.id }, (err, deliverer) => {
         if(err){
           return res.status(404).json({
             error: err,
-            message: 'Contato não encontrado!'
+            message: 'Entregador não encontrado!'
           })
         }
 
-        Object.assign(contact, body)
+        Object.assign(deliverer, body)
 
-        contact
+        deliverer
           .save()
           .then(() => {
             return res.status(200).json({
               success: true,
-              id: contact.nome,
-              message: 'Contato atualizado!'
+              id: deliverer.nome,
+              message: 'Entregador atualizado!'
             })
           })
           .catch(err => {
             return res.status(404).json({
               err,
-              message: 'Falha ao atualizar o contato!'
+              message: 'Falha ao atualizar o entregador!'
             })
           })
       })
     }
 }
 
-deleteContact = async (req, res) => {
-  await Contact.findOneAndDelete({ _id: req.params.id }, (err, contact) => {
+deleteDeliverer = async (req, res) => {
+  await Deliverer.findOneAndDelete({ _id: req.params.id }, (err, deliverer) => {
     if(err){
       return res.status(400).json({
         success: false,
         error: err
       })
     }
-    if(!contact){
+    if(!deliverer){
       return res.status(404).json({
         success: false,
-        error: 'Contato não encontrado.'
+        error: 'Entregador não encontrado.'
       })
     }
 
     return res.status(200).json({
       success: true,
-      data: contact.nome,
-      message: "Contato deletado com sucesso."
+      data: deliverer.nome,
+      message: "Entregador deletado com sucesso."
     })
   }).catch( err => console.error(err))
 }
 
-getContactById = async (req, res) => {
-  await Contact.findOne({ _id: req.params.id }, (err, contact) => {
+getDelivererById = async (req, res) => {
+  await Deliverer.findOne({ _id: req.params.id }, (err, deliverer) => {
     if(err){
       return res.status(400).json({
         success: false,
         error: err,
-        message: 'Contato não encontrado!'
+        message: 'Entregador não encontrado!'
       })
     }
 
-    if(!contact){
+    if(!deliverer){
       return res.status(404).json({
         success: false,
-        error: 'Contato não encontrado!'
+        error: 'Entregador não encontrado!'
       })
     }
     return res.status(200).json({
       success: true,
-      data: contact
+      data: deliverer
     })
   }).catch(err => console.error(err))
 }
 
-getContacts = async (req, res) => {
-  await Contact.find({}, (err, contacts) => {
+getDeliverers = async (req, res) => {
+  await Deliverer.find({}, (err, deliverers) => {
     if(err){
       return res.status(400).json({
         success: false,
         error: err
       })
     }
-    if(!contacts.length){
+    if(!deliverers.length){
       return res.status(404).json({
         success: false,
-        error: 'Contatos não encontrados!'
+        error: 'Entregadores não encontrados!'
       })
     }
     return res.status(200).json({
       success: true,
-      data: contacts
+      data: deliverers
     })
   }).catch(err => console.error(err))
 }
 
 module.exports = {
-  createContact,
-  updateContact,
-  deleteContact,
-  getContactById,
-  getContacts
+  createDeliverer,
+  updateDeliverer,
+  deleteDeliverer,
+  getDelivererById,
+  getDeliverers
 }

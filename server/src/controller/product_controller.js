@@ -1,150 +1,150 @@
-const Contact = require('../models/contact_model')
+const Product = require('../models/product_model')
 
-createContact = (req, res) => {
+createProduct = (req, res) => {
   const body = req.body
 
   if(!body){
     return res.status(400).json({
       success: false,
-      error: 'Você deve fornecer um contato.',
+      error: 'Você deve fornecer um Produto.',
     })
   }
 
-  const contact = new Contact(body)
+  const product = new Product(body)
 
-  if(!contact){
+  if(!product){
     return res.status(400).json({
       success: false,
       error: err
     })
   }
 
-  contact
+  product
     .save()
     .then(() => {
       return res.status(201).json({
         success: true,
-        id: contact._id,
-        message: 'Contato criado com sucesso!'
+        id: product._id,
+        message: 'Produto criado com sucesso!'
       })
     })
     .catch(err => {
       return res.status(400).json({
         error: err,
-        message: 'Falha ao criar um contato!'
+        message: 'Falha ao criar um Produto!'
       })
     })
 }
 
-updateContact = async (req, res) => {
+updateProduct = async (req, res) => {
   const body = req.body
 
   if(!body){
     return res.status(400).json({
       success: false,
-      error: 'Você deve fornecer um contato para atualizar.'
+      error: 'Você deve fornecer um Produto para atualizar.'
     })
   } else{
-      await Contact.findOne({ _id: req.params.id }, (err, contact) => {
+      await Product.findOne({ _id: req.params.id }, (err, product) => {
         if(err){
           return res.status(404).json({
             error: err,
-            message: 'Contato não encontrado!'
+            message: 'Produto não encontrado!'
           })
         }
 
-        Object.assign(contact, body)
+        Object.assign(product, body)
 
-        contact
+        product
           .save()
           .then(() => {
             return res.status(200).json({
               success: true,
-              id: contact.nome,
-              message: 'Contato atualizado!'
+              id: product.nome,
+              message: 'Produto atualizado!'
             })
           })
           .catch(err => {
             return res.status(404).json({
               err,
-              message: 'Falha ao atualizar o contato!'
+              message: 'Falha ao atualizar o Produto!'
             })
           })
       })
     }
 }
 
-deleteContact = async (req, res) => {
-  await Contact.findOneAndDelete({ _id: req.params.id }, (err, contact) => {
+deleteProduct = async (req, res) => {
+  await Product.findOneAndDelete({ _id: req.params.id }, (err, product) => {
     if(err){
       return res.status(400).json({
         success: false,
         error: err
       })
     }
-    if(!contact){
+    if(!product){
       return res.status(404).json({
         success: false,
-        error: 'Contato não encontrado.'
+        error: 'Produto não encontrado.'
       })
     }
 
     return res.status(200).json({
       success: true,
-      data: contact.nome,
-      message: "Contato deletado com sucesso."
+      data: product.nome,
+      message: "Produto deletado com sucesso."
     })
   }).catch( err => console.error(err))
 }
 
-getContactById = async (req, res) => {
-  await Contact.findOne({ _id: req.params.id }, (err, contact) => {
+getProductById = async (req, res) => {
+  await Product.findOne({ _id: req.params.id }, (err, product) => {
     if(err){
       return res.status(400).json({
         success: false,
         error: err,
-        message: 'Contato não encontrado!'
+        message: 'Produto não encontrado!'
       })
     }
 
-    if(!contact){
+    if(!product){
       return res.status(404).json({
         success: false,
-        error: 'Contato não encontrado!'
+        error: 'Produto não encontrado!'
       })
     }
     return res.status(200).json({
       success: true,
-      data: contact
+      data: product
     })
   }).catch(err => console.error(err))
 }
 
-getContacts = async (req, res) => {
-  await Contact.find({}, (err, contacts) => {
+getProducts = async (req, res) => {
+  await Product.find({}, (err, products) => {
     if(err){
       return res.status(400).json({
         success: false,
         error: err
       })
     }
-    if(!contacts.length){
+    if(!products.length){
       return res.status(404).json({
         success: false,
-        error: 'Contatos não encontrados!'
+        error: 'Produtos não encontrados!'
       })
     }
     return res.status(200).json({
       success: true,
-      data: contacts
+      data: products
     })
   }).catch(err => console.error(err))
 }
 
 module.exports = {
-  createContact,
-  updateContact,
-  deleteContact,
-  getContactById,
-  getContacts
+  createProduct,
+  updateProduct,
+  deleteProduct,
+  getProductById,
+  getProducts
 }

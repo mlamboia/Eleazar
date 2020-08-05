@@ -9,6 +9,5 @@ router.put('/contact/:id', ContactController.updateContact)
 router.delete('/contact/:id', ContactController.deleteContact)
 router.get('/contact/:id', ContactController.getContactById)
 router.get('/contacts', ContactController.getContacts)
-router.delete('/contacts/delete_all', ContactController.deleteAll)
 
 module.exports = router
