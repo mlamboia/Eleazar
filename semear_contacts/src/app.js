@@ -3,14 +3,16 @@ import NavBar from './components/navbar'
 import { 
 	BrowserRouter as Router,
 	Route, 
-	Switch,
-	Redirect
+	Switch
 } from 'react-router-dom'
 import {
 	AddContact,
 	UpdateContact,
 	ListContacts
 } from './pages/index';
+
+import '../node_modules/react-bootstrap-table/dist/react-bootstrap-table-all.min.css';
+
 
 function App() {
 	return (

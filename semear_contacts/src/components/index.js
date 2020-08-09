@@ -1,19 +1,19 @@
 import Link from './link';
 import Logo from './logo';
-import ReactTable from './reactTable'
+import Table from './table'
 import { 
   Container, 
   Nav,
   TableWrap,
-  ReactTableStyle
+  TableStyle
 } from '../assets/style/styles';
 
 export { 
   Container, 
   Nav,
   TableWrap,
-  ReactTableStyle,
-  ReactTable, 
+  TableStyle,
+  Table, 
   Link, 
   Logo 
 }

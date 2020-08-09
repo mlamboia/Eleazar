@@ -3,65 +3,50 @@ import {
   api,
   Container,
 } from '../index';
-import { ReactTable } from '../index';
+import { Table } from '../index';
+import useFetch from '../../api/useFetch'
 
-class ListContacts extends Component {
-  constructor(props){
-    super(props)
-    this.state = {
-      contacts: [],
-      isLoading: false
+function ListContacts(){
+  const { data } = useFetch(`/contacts`);
+
+  if(!data){
+    return <p>Carregando...</p>
+  }
+
+  const columns = [
+    {
+      header: 'Nome',
+      id: 'nome',
+      key: true,
+      filterable: true
+    },
+    {
+      header: 'Bairro',
+      id: 'bairro',
+      filterable: true
+    },
+    {
+      header: 'Endereço',
+      id: 'endereco',
+      filterable: true
+    },
+    {
+      header: 'Entrega',
+      id: 'entrega',
+      filterable: true
+    },
+    {
+      header: 'Telefone',
+      id: 'telefone',
+      filterable: true
     }
-  }
+  ];
 
-  componentDidMount = async () => {
-    this.setState({ isLoading: true })
-
-    await api.getAllContacts().then(contacts => {
-      this.setState({
-          contacts: contacts.data.data,
-          isLoading: false
-      })
-    })
-  }
-
-  render(){
-    const { contacts, isLoading } = this.state;
-
-    const columns = [
-      {
-        Header: 'Nome',
-        accessor: 'nome',
-        filterable: true
-      },
-      {
-        Header: 'Endereço',
-        accessor: 'endereco',
-        filterable: true
-      },
-      {
-        Header: 'Entrega',
-        accessor: 'entrega',
-        filterable: true
-      },
-      {
-        Header: 'Telefone',
-        accessor: 'telefone',
-        filterable: true
-      }
-    ];
-
-    let showTable = true;
-    if(!contacts.length){
-      showTable = false
-    }
-
-    return(
-      <Container>
-        <ReactTable columns={columns} data={contacts}/>
-      </Container>
-    )
-  }
+  return(
+    <Container>
+      <Table columns={columns} data={data.data}/>
+    </Container>
+  )
 }
 
 export default ListContacts

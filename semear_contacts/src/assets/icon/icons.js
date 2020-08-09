@@ -4,7 +4,14 @@ import {
   faUserPlus,
   faDove,
   faUtensils,
-  faEdit
+  faEdit,
+  faSort,
+  faSortUp,
+  faSortDown,
+  faAngleRight,
+  faAngleLeft,
+  faAngleDoubleRight,
+  faAngleDoubleLeft
 } from '@fortawesome/free-solid-svg-icons'
 
 library.add(
@@ -12,7 +19,14 @@ library.add(
   faUserPlus, 
   faDove, 
   faUtensils,
-  faEdit
+  faEdit,
+  faSort,
+  faSortUp,
+  faSortDown,
+  faAngleRight,
+  faAngleLeft,
+  faAngleDoubleRight,
+  faAngleDoubleLeft
 )
 
 export default library

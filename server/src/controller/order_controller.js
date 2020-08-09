@@ -18,14 +18,9 @@ createOrder = (req, res) => {
       error: err
     })
   }
+
   order
     .save()
-    .then((order) => {
-      order
-        .populate('products')
-        .populate('deliverers')
-        .execPopulate()
-    })
     .then(() => {
       return res.status(201).json({
         success: true,
@@ -80,7 +75,10 @@ updateOrder = async (req, res) => {
 }
 
 deleteOrder = async (req, res) => {
-  await Order.findOneAndDelete({ _id: req.params.id }, (err, order) => {
+  await Order.findOneAndDelete({ _id: req.params.id })
+  .populate('contacts')
+  .populate('deliverers')
+  .exec((err, order) => {
     if(err){
       return res.status(400).json({
         success: false,
@@ -103,7 +101,10 @@ deleteOrder = async (req, res) => {
 }
 
 getOrderById = async (req, res) => {
-  await Order.findOne({ _id: req.params.id }, (err, order) => {
+  await Order.findOne({ _id: req.params.id })
+  .populate('contacts')
+  .populate('deliverers')
+  .exec((err, order) => {
     if(err){
       return res.status(400).json({
         success: false,
@@ -126,50 +127,27 @@ getOrderById = async (req, res) => {
 }
 
 getOrders = async (req, res) => {
-  await Order.find({}, (err, orders) => {
+  await Order.find({})
+  .populate('contacts')
+  .populate('deliverers')
+  .exec((err, orders) => {
     if(err){
       return res.status(400).json({
         success: false,
         error: err
       })
     }
+
     if(!orders.length){
       return res.status(404).json({
         success: false,
         error: 'Pedidos não encontrados!'
       })
     }
+
     return res.status(200).json({
       success: true,
       data: orders
-    })
-  }).catch(err => console.error(err))
-}
-
-getOrderedProducts = async (req, res) => {
-  await Order.find({ _id: req.params.id })
-  .populate({ 
-    path: 'products',
-    match: {'quantidade': {$gte: 1}}
-  })
-  .populate('deliverers')
-  .exec((err, order) => {
-    if(err){
-      return res.status(400).json({
-        success: false,
-        error: err
-      })
-    }
-    if(!order.length){
-      return res.status(404).json({
-        success: false,
-        error: 'Pedido não encontrado!'
-      })
-    }
-
-    return res.status(200).json({
-      success: true,
-      data: order
     })
   }).catch(err => console.error(err))
 }
@@ -179,6 +157,5 @@ module.exports = {
   updateOrder,
   deleteOrder,
   getOrderById,
-  getOrders,
-  getOrderedProducts
+  getOrders
 }

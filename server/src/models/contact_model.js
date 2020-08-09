@@ -27,9 +27,6 @@ const Contact = new Schema(
       type: String, 
       required: [true, "É necessário um telefone"], 
       unique: true 
-    },
-    orders: {
-      type: Schema.Types.ObjectId, ref: 'orders'
     }
   },
   { timestamps: true },

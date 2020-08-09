@@ -4,7 +4,7 @@ import ListContacts from './contact/listContacts';
 
 import api from '../api/index';
 
-import { ReactTable } from '../components/index';
+import { Table } from '../components/index';
 
 import { 
   Container
@@ -16,6 +16,6 @@ export {
   ListContacts,
   api,
   Container,
-  ReactTable
+  Table
 }
 
