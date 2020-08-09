@@ -145,12 +145,15 @@ const TableStyle = styled.div`
       :last-child {
         border-right: 0;
       }
+      :hover{
+        background-color: #e8e8e8
+      }
     }
     tr:nth-child(even){
-      background-color: #f2f2f2;
+      background-color: #f0f0f0;
     }
     tr:hover {
-      background-color: #ddd;
+      background-color: #f8f8f8;
     }
   }
 `
