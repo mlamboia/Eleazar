@@ -1,8 +1,12 @@
 import React, { Component } from 'react';
 import { TableStyle } from './index';
+import '../../node_modules/react-bootstrap-table/dist/react-bootstrap-table-all.min.css';
+
 var ReactBsTable  = require('react-bootstrap-table');
 var BootstrapTable = ReactBsTable.BootstrapTable;
 var TableHeaderColumn = ReactBsTable.TableHeaderColumn;
+
+
 
 class Table extends Component {
   constructor(props){
