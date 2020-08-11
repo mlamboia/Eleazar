@@ -1,22 +1,22 @@
-const Deliverer = require('../models/deliverer_model')
+const Deliverer = require('../models/deliverer_model');
 
 createDeliverer = (req, res) => {
-  const body = req.body
+  const body = req.body;
 
-  if(!body){
+  if (!body) {
     return res.status(400).json({
       success: false,
       error: 'Você deve fornecer um entregador.',
-    })
+    });
   }
 
-  const deliverer = new Deliverer(body)
+  const deliverer = new Deliverer(body);
 
-  if(!deliverer){
+  if (!deliverer) {
     return res.status(400).json({
       success: false,
-      error: err
-    })
+      error: err,
+    });
   }
 
   deliverer
@@ -25,126 +25,126 @@ createDeliverer = (req, res) => {
       return res.status(201).json({
         success: true,
         id: deliverer._id,
-        message: 'Entregador criado com sucesso!'
-      })
+        message: 'Entregador criado com sucesso!',
+      });
     })
-    .catch(err => {
+    .catch((err) => {
       return res.status(400).json({
         error: err,
-        message: 'Falha ao criar um entregador!'
-      })
-    })
-}
+        message: 'Falha ao criar um entregador!',
+      });
+    });
+};
 
 updateDeliverer = async (req, res) => {
-  const body = req.body
+  const body = req.body;
 
-  if(!body){
+  if (!body) {
     return res.status(400).json({
       success: false,
-      error: 'Você deve fornecer um entregador para atualizar.'
-    })
-  } else{
-      await Deliverer.findOne({ _id: req.params.id }, (err, deliverer) => {
-        if(err){
+      error: 'Você deve fornecer um entregador para atualizar.',
+    });
+  } else {
+    await Deliverer.findOne({ _id: req.params.id }, (err, deliverer) => {
+      if (err) {
+        return res.status(404).json({
+          error: err,
+          message: 'Entregador não encontrado!',
+        });
+      }
+
+      Object.assign(deliverer, body);
+
+      deliverer
+        .save()
+        .then(() => {
+          return res.status(200).json({
+            success: true,
+            id: deliverer.nome,
+            message: 'Entregador atualizado!',
+          });
+        })
+        .catch((err) => {
           return res.status(404).json({
-            error: err,
-            message: 'Entregador não encontrado!'
-          })
-        }
-
-        Object.assign(deliverer, body)
-
-        deliverer
-          .save()
-          .then(() => {
-            return res.status(200).json({
-              success: true,
-              id: deliverer.nome,
-              message: 'Entregador atualizado!'
-            })
-          })
-          .catch(err => {
-            return res.status(404).json({
-              err,
-              message: 'Falha ao atualizar o entregador!'
-            })
-          })
-      })
-    }
-}
+            err,
+            message: 'Falha ao atualizar o entregador!',
+          });
+        });
+    });
+  }
+};
 
 deleteDeliverer = async (req, res) => {
   await Deliverer.findOneAndDelete({ _id: req.params.id }, (err, deliverer) => {
-    if(err){
+    if (err) {
       return res.status(400).json({
         success: false,
-        error: err
-      })
+        error: err,
+      });
     }
-    if(!deliverer){
+    if (!deliverer) {
       return res.status(404).json({
         success: false,
-        error: 'Entregador não encontrado.'
-      })
+        error: 'Entregador não encontrado.',
+      });
     }
 
     return res.status(200).json({
       success: true,
       data: deliverer.nome,
-      message: "Entregador deletado com sucesso."
-    })
-  }).catch( err => console.error(err))
-}
+      message: 'Entregador deletado com sucesso.',
+    });
+  }).catch((err) => console.error(err));
+};
 
 getDelivererById = async (req, res) => {
   await Deliverer.findOne({ _id: req.params.id }, (err, deliverer) => {
-    if(err){
+    if (err) {
       return res.status(400).json({
         success: false,
         error: err,
-        message: 'Entregador não encontrado!'
-      })
+        message: 'Entregador não encontrado!',
+      });
     }
 
-    if(!deliverer){
+    if (!deliverer) {
       return res.status(404).json({
         success: false,
-        error: 'Entregador não encontrado!'
-      })
+        error: 'Entregador não encontrado!',
+      });
     }
     return res.status(200).json({
       success: true,
-      data: deliverer
-    })
-  }).catch(err => console.error(err))
-}
+      data: deliverer,
+    });
+  }).catch((err) => console.error(err));
+};
 
 getDeliverers = async (req, res) => {
   await Deliverer.find({}, (err, deliverers) => {
-    if(err){
+    if (err) {
       return res.status(400).json({
         success: false,
-        error: err
-      })
+        error: err,
+      });
     }
-    if(!deliverers.length){
+    if (!deliverers.length) {
       return res.status(404).json({
         success: false,
-        error: 'Entregadores não encontrados!'
-      })
+        error: 'Entregadores não encontrados!',
+      });
     }
     return res.status(200).json({
       success: true,
-      data: deliverers
-    })
-  }).catch(err => console.error(err))
-}
+      data: deliverers,
+    });
+  }).catch((err) => console.error(err));
+};
 
 module.exports = {
   createDeliverer,
   updateDeliverer,
   deleteDeliverer,
   getDelivererById,
-  getDeliverers
-}
+  getDeliverers,
+};
