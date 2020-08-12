@@ -94,7 +94,7 @@ deleteProduct = async (req, res) => {
       data: product._id,
       message: 'Produto deletado com sucesso.',
     });
-  }).catch((err) => console.error(err));
+  });
 };
 
 getProductById = async (req, res) => {
@@ -117,7 +117,7 @@ getProductById = async (req, res) => {
       success: true,
       data: product,
     });
-  }).catch((err) => console.error(err));
+  });
 };
 
 getProducts = async (req, res) => {
@@ -138,7 +138,7 @@ getProducts = async (req, res) => {
       success: true,
       data: products,
     });
-  }).catch((err) => console.error(err));
+  });
 };
 
 module.exports = {

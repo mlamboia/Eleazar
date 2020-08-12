@@ -1,5 +1,6 @@
 const Order = require('../models/order_model');
 const Contact = require('../models/contact_model');
+const assert = require('assert');
 
 createOrder = (req, res) => {
   const body = req.body;
@@ -23,7 +24,7 @@ createOrder = (req, res) => {
   order
     .save()
     .then(() => {
-      findAndUpdateContactWithOrder(order._doc._id, order._doc.contacts);
+      findAndUpdateContactWithOrder(order._doc);
 
       return res.status(201).json({
         success: true,
@@ -40,15 +41,14 @@ createOrder = (req, res) => {
     .catch((err) => console.error(err));
 };
 
-findContactById = async (id) => {
-  const contact = await Contact.findOne({ _id: id });
-  return contact;
-};
-
-UpdateContactWithOrder = (orderId, contactId) => {
-  const contact = findContactById(contactId);
-  contact.orders.push(orderId);
-  contact.save();
+findAndUpdateContactWithOrder = async (order) => {
+  try {
+    const contact = await Contact.findOne({ _id: order.contacts });
+    contact.orders.push(order._id);
+    contact.save();
+  } catch (err) {
+    console.error(err);
+  }
 };
 
 updateOrder = async (req, res) => {
@@ -59,34 +59,34 @@ updateOrder = async (req, res) => {
       success: false,
       error: 'Você deve fornecer um Pedido para atualizar.',
     });
-  } else {
-    await Order.findOne({ _id: req.params.id }, (err, order) => {
-      if (err) {
-        return res.status(404).json({
-          error: err,
-          message: 'Pedido não encontrado!',
-        });
-      }
-
-      Object.assign(order, body);
-
-      order
-        .save()
-        .then(() => {
-          return res.status(200).json({
-            success: true,
-            id: order._id,
-            message: 'Pedido atualizado!',
-          });
-        })
-        .catch((err) => {
-          return res.status(404).json({
-            err,
-            message: 'Falha ao atualizar o Pedido!',
-          });
-        });
-    }).catch((err) => console.error(err));
   }
+
+  await Order.findOne({ _id: req.params.id }, (err, order) => {
+    if (err) {
+      return res.status(404).json({
+        error: err,
+        message: 'Pedido não encontrado!',
+      });
+    }
+
+    Object.assign(order, body);
+
+    order
+      .save()
+      .then(() => {
+        return res.status(200).json({
+          success: true,
+          id: order._id,
+          message: 'Pedido atualizado!',
+        });
+      })
+      .catch((err) => {
+        return res.status(404).json({
+          err,
+          message: 'Falha ao atualizar o Pedido!',
+        });
+      });
+  }).catch((err) => console.error(err));
 };
 
 deleteOrder = async (req, res) => {
@@ -97,6 +97,7 @@ deleteOrder = async (req, res) => {
         error: err,
       });
     }
+
     if (!order) {
       return res.status(404).json({
         success: false,
@@ -104,19 +105,36 @@ deleteOrder = async (req, res) => {
       });
     }
 
+    findAndDeleteOrderFromContact(order._doc);
+
     return res.status(200).json({
       success: true,
       data: order._id,
       message: 'Pedido deletado com sucesso.',
     });
-  }).catch((err) => console.error(err));
+  });
+};
+
+findAndDeleteOrderFromContact = async (order) => {
+  try {
+    const contact = await Contact.findOne({ _id: order.contacts });
+
+    contact.orders.reduce((acc, anOrder, i) => {
+      if (JSON.stringify(anOrder) == JSON.stringify(order._id)) {
+        delete contact.orders.splice(i, 1);
+        contact.save();
+      }
+    });
+  } catch (err) {
+    console.error(err);
+  }
 };
 
 getOrderById = async (req, res) => {
   await Order.findOne({ _id: req.params.id })
-    .populate('contacts')
-    .populate('deliverers')
-    .populate('produtos.products')
+    .populate('contacts', 'id nome bairro endereco entrega telefone')
+    .populate('deliverers', 'id nome')
+    .populate('produtos.products', 'nome preco_unidade')
     .exec((err, order) => {
       if (err) {
         return res.status(400).json({
@@ -140,30 +158,26 @@ getOrderById = async (req, res) => {
 };
 
 getOrders = async (req, res) => {
-  await Order.find({})
-    .populate('contacts', 'id nome bairro endereco entrega telefone')
-    .populate('deliverers', 'id nome')
-    .populate('produtos.products', 'nome preco_unidade')
-    .exec((err, orders) => {
-      if (err) {
-        return res.status(400).json({
-          success: false,
-          error: err,
-        });
-      }
-
-      if (!orders.length) {
-        return res.status(404).json({
-          success: false,
-          error: 'Pedidos não encontrados!',
-        });
-      }
-
-      return res.status(200).json({
-        success: true,
-        data: orders,
+  await Order.find({}, (err, orders) => {
+    if (err) {
+      return res.status(400).json({
+        success: false,
+        error: err,
       });
+    }
+
+    if (!orders.length) {
+      return res.status(404).json({
+        success: false,
+        error: 'Pedidos não encontrados!',
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      data: orders,
     });
+  });
 };
 
 module.exports = {

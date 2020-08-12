@@ -94,7 +94,7 @@ deleteDeliverer = async (req, res) => {
       data: deliverer.nome,
       message: 'Entregador deletado com sucesso.',
     });
-  }).catch((err) => console.error(err));
+  });
 };
 
 getDelivererById = async (req, res) => {
@@ -117,7 +117,7 @@ getDelivererById = async (req, res) => {
       success: true,
       data: deliverer,
     });
-  }).catch((err) => console.error(err));
+  });
 };
 
 getDeliverers = async (req, res) => {
@@ -138,7 +138,7 @@ getDeliverers = async (req, res) => {
       success: true,
       data: deliverers,
     });
-  }).catch((err) => console.error(err));
+  });
 };
 
 module.exports = {

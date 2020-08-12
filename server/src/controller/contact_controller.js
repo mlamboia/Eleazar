@@ -1,4 +1,5 @@
 const Contact = require('../models/contact_model');
+const { populate } = require('../models/contact_model');
 
 createContact = (req, res) => {
   const body = req.body;
@@ -94,12 +95,17 @@ deleteContact = async (req, res) => {
       data: contact.nome,
       message: 'Contato deletado com sucesso.',
     });
-  }).catch((err) => console.error(err));
+  });
 };
 
 getContactById = async (req, res) => {
   await Contact.findOne({ _id: req.params.id })
-    .populate('orders')
+    .populate({
+      path: 'orders',
+      select: 'produtos deliverers',
+      populate: { path: 'deliverers', select: 'nome' },
+      populate: { path: 'produtos.products', select: 'nome' },
+    })
     .exec((err, contact) => {
       if (err) {
         return res.status(400).json({
@@ -119,13 +125,17 @@ getContactById = async (req, res) => {
         success: true,
         data: contact,
       });
-    })
-    .catch((err) => console.error(err));
+    });
 };
 
 getContacts = async (req, res) => {
   await Contact.find({})
-    .populate('orders')
+    .populate({
+      path: 'orders',
+      select: 'produtos deliverers',
+      populate: { path: 'deliverers', select: 'nome' },
+      populate: { path: 'produtos.products', select: 'nome' },
+    })
     .exec((err, contacts) => {
       if (err) {
         return res.status(400).json({
@@ -143,8 +153,7 @@ getContacts = async (req, res) => {
         success: true,
         data: contacts,
       });
-    })
-    .catch((err) => console.error(err));
+    });
 };
 
 module.exports = {
