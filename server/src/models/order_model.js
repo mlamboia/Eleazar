@@ -36,4 +36,8 @@ const Order = new Schema(
   { timestamps: true }
 );
 
+Order.virtual('preco.total').get(() => {
+  return this.preco + 1;
+});
+
 module.exports = mongoose.model('orders', Order);

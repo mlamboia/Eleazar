@@ -157,26 +157,30 @@ getOrderById = async (req, res) => {
 };
 
 getOrders = async (req, res) => {
-  await Order.find({}, (err, orders) => {
-    if (err) {
-      return res.status(400).json({
-        success: false,
-        error: err,
-      });
-    }
+  await Order.find({})
+    .populate('contacts', 'id nome bairro endereco entrega telefone')
+    .populate('deliverers', 'id nome')
+    .populate('produtos.products', 'nome preco_unidade')
+    .exec((err, orders) => {
+      if (err) {
+        return res.status(400).json({
+          success: false,
+          error: err,
+        });
+      }
 
-    if (!orders.length) {
-      return res.status(404).json({
-        success: false,
-        error: 'Pedidos não encontrados!',
-      });
-    }
+      if (!orders.length) {
+        return res.status(404).json({
+          success: false,
+          error: 'Pedidos não encontrados!',
+        });
+      }
 
-    return res.status(200).json({
-      success: true,
-      data: orders,
+      return res.status(200).json({
+        success: true,
+        data: orders,
+      });
     });
-  });
 };
 
 module.exports = {
