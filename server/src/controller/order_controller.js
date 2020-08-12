@@ -37,8 +37,7 @@ createOrder = (req, res) => {
         error: err,
         message: 'Falha ao criar um Pedido!',
       });
-    })
-    .catch((err) => console.error(err));
+    });
 };
 
 findAndUpdateContactWithOrder = async (order) => {
@@ -86,7 +85,7 @@ updateOrder = async (req, res) => {
           message: 'Falha ao atualizar o Pedido!',
         });
       });
-  }).catch((err) => console.error(err));
+  });
 };
 
 deleteOrder = async (req, res) => {
