@@ -28,10 +28,12 @@ const Contact = new Schema(
       required: [true, 'É necessário um telefone'],
       unique: true,
     },
-    orders: {
-      type: Schema.Types.ObjectId,
-      ref: 'orders',
-    },
+    orders: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'orders',
+      },
+    ],
   },
   { timestamps: true }
 );

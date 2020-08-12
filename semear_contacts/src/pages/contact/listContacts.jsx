@@ -1,52 +1,51 @@
-import React, { Component } from 'react';
-import { 
-  api,
-  Container,
-} from '../index';
-import { Table } from '../index';
-import useFetch from '../../api/useFetch'
+import React from 'react';
+import { api, Container, Table } from '../index';
+import useFetch from '../../api/useFetch';
+import BootstrapTable from 'react-bootstrap-table-next';
+import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 
-function ListContacts(){
-  const { data } = useFetch(`/contacts`);
+function ListContacts() {
+  const { data } = useFetch('/contacts');
 
-  if(!data){
-    return <p>Carregando...</p>
+  if (!data) {
+    return <p>Carregando...</p>;
   }
+
+  console.log(data.data);
 
   const columns = [
     {
       header: 'Nome',
       id: 'nome',
-      key: true,
-      filterable: true
+      sort: true,
     },
     {
       header: 'Bairro',
       id: 'bairro',
-      filterable: true
+      sort: true,
     },
     {
       header: 'Endereço',
       id: 'endereco',
-      filterable: true
+      sort: true,
     },
     {
       header: 'Entrega',
       id: 'entrega',
-      filterable: true
+      sort: true,
     },
     {
       header: 'Telefone',
       id: 'telefone',
-      filterable: true
-    }
+      sort: true,
+    },
   ];
 
-  return(
+  return (
     <Container>
-      <Table columns={columns} data={data.data}/>
+      <BootstrapTable keyField='nome' columns={columns} data={data} />
     </Container>
-  )
+  );
 }
 
-export default ListContacts
+export default ListContacts;

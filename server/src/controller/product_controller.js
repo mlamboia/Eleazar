@@ -60,7 +60,7 @@ updateProduct = async (req, res) => {
         .then(() => {
           return res.status(200).json({
             success: true,
-            id: product.nome,
+            id: product._id,
             message: 'Produto atualizado!',
           });
         })
@@ -91,7 +91,7 @@ deleteProduct = async (req, res) => {
 
     return res.status(200).json({
       success: true,
-      data: product.nome,
+      data: product._id,
       message: 'Produto deletado com sucesso.',
     });
   }).catch((err) => console.error(err));

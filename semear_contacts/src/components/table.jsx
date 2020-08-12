@@ -1,43 +1,26 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { TableStyle } from './index';
 import '../../node_modules/react-bootstrap-table/dist/react-bootstrap-table-all.min.css';
 
-var ReactBsTable  = require('react-bootstrap-table');
-var BootstrapTable = ReactBsTable.BootstrapTable;
-var TableHeaderColumn = ReactBsTable.TableHeaderColumn;
+import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css';
 
+const ReactBsTable = require('react-bootstrap-table');
 
+const { BootstrapTable } = ReactBsTable;
+const { TableHeaderColumn } = ReactBsTable;
 
-class Table extends Component {
-  constructor(props){
-    super(props);
-    this.state = {
-      data: this.props.data,
-      columns: this.props.columns
-    }
-  }
-
-  render() {
-    const { columns } = this.state;
-    const { data } = this.props
-    return (
-      <TableStyle>
-        <BootstrapTable
-          data={ data }
-          pagination>
-            { 
-              columns.map((column) => {
-                return(
-                <TableHeaderColumn isKey={ column.key } dataField={ column.id }>
-                    { column.header }
-                </TableHeaderColumn>
-                )
-              })  
-            }
-        </BootstrapTable>
-      </TableStyle>
-    );
-  }
+function Table(data, columns) {
+  return (
+    <TableStyle>
+      <BootstrapTable data={data} pagination>
+        {columns.map((column) => (
+          <TableHeaderColumn isKey={column.key} dataField={column.id}>
+            {column.header}
+          </TableHeaderColumn>
+        ))}
+      </BootstrapTable>
+    </TableStyle>
+  );
 }
 
 export default Table;

@@ -8,13 +8,9 @@ const Product = new Schema(
       required: [true, 'É necessário um nome'],
       unique: true,
     },
-    preco: {
+    preco_unidade: {
       type: Number,
       required: [true, 'É necessário um preço'],
-    },
-    quantidade: {
-      type: Number,
-      default: 0,
     },
     observacao: {
       type: String,

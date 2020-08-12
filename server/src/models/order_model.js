@@ -13,14 +13,24 @@ const Order = new Schema(
       ref: 'deliverers',
       required: [true, 'É necessário um entregador'],
     },
-    products: [
+    produtos: [
       {
-        type: String,
-        required: [true, 'É necessário um produto!'],
+        quantidade: {
+          type: { Number, min: 1 },
+          default: 1,
+        },
+        products: {
+          type: Schema.Types.ObjectId,
+          ref: 'products',
+          required: [true, 'É necessário um produtos'],
+        },
+        preco: {
+          type: Number,
+        },
       },
     ],
     total: {
-      type: Number,
+      type: { Number, min: 5 },
     },
   },
   { timestamps: true }

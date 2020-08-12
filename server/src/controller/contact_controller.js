@@ -28,7 +28,6 @@ createContact = (req, res) => {
         message: 'Contato criado com sucesso!',
       });
     })
-    .then(() => {})
     .catch((err) => {
       return res.status(400).json({
         error: err,
@@ -99,26 +98,29 @@ deleteContact = async (req, res) => {
 };
 
 getContactById = async (req, res) => {
-  await Contact.findOne({ _id: req.params.id }, (err, contact) => {
-    if (err) {
-      return res.status(400).json({
-        success: false,
-        error: err,
-        message: 'Contato não encontrado!',
-      });
-    }
+  await Contact.findOne({ _id: req.params.id })
+    .populate('orders')
+    .exec((err, contact) => {
+      if (err) {
+        return res.status(400).json({
+          success: false,
+          error: err,
+          message: 'Contato não encontrado!',
+        });
+      }
 
-    if (!contact) {
-      return res.status(404).json({
-        success: false,
-        error: 'Contato não encontrado!',
+      if (!contact) {
+        return res.status(404).json({
+          success: false,
+          error: 'Contato não encontrado!',
+        });
+      }
+      return res.status(200).json({
+        success: true,
+        data: contact,
       });
-    }
-    return res.status(200).json({
-      success: true,
-      data: contact,
-    });
-  }).catch((err) => console.error(err));
+    })
+    .catch((err) => console.error(err));
 };
 
 getContacts = async (req, res) => {

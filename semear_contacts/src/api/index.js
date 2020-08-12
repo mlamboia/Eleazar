@@ -1,7 +1,7 @@
-import useFetch from './useFetch'
+import useFetch from './useFetch';
 
 // const addContact = payload => useFetch.post(`/contact`, payload)
-// const getAllContacts = useFetch(`/contacts`)
+// const getAllContacts = useFetch('/contacts')
 // const updateContact = (id, payload) => useFetch.put(`/contact/${id}`, payload)
 // const deleteContact = id => useFetch.delete(`/contact/${id}`)
 // const getContact = id => useFetch.get(`/contact/${id}`)
@@ -45,6 +45,6 @@ const apis = {
   // updateProduct,
   // deleteProduct,
   // getProduct
-}
+};
 
 export default apis;
