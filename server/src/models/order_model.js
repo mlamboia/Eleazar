@@ -29,15 +29,10 @@ const Order = new Schema(
         },
       },
     ],
-    total: {
-      type: { Number, min: 5 },
-    },
+    preco_total: Number,
+    quantidade_total_produtos: Number,
   },
   { timestamps: true }
 );
-
-Order.virtual('preco.total').get(() => {
-  return this.preco + 1;
-});
 
 module.exports = mongoose.model('orders', Order);

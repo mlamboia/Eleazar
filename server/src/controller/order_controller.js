@@ -21,6 +21,9 @@ createOrder = (req, res) => {
     });
   }
 
+  addOrderTotalQuantity(order._doc);
+  addOrderTotalPrice(order);
+
   order
     .save()
     .then(() => {
@@ -49,6 +52,33 @@ findAndUpdateContactWithOrder = async (order) => {
     console.error(err);
   }
 };
+
+addOrderTotalPrice = (order) => {
+  order
+    .populate('produtos.products', 'nome preco_unidade')
+    .execPopulate((err, order) => {
+      try {
+        order.produtos.reduce((acc, cur, i) => {
+          console.log(acc.products.preco_unidade + cur.products.preco_unidade);
+        });
+      } catch (err) {
+        console.log(err);
+      }
+    });
+};
+
+addOrderTotalQuantity = (order) => {
+  try {
+    order.produtos.reduce((acc, cur) => {
+      return (order.quantidade_total_produtos =
+        acc.quantidade + cur.quantidade);
+    });
+  } catch (err) {
+    console.error(err);
+  }
+};
+
+addOrderProductsTotalPrice = () => {};
 
 updateOrder = async (req, res) => {
   const body = req.body;
