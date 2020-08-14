@@ -25,7 +25,9 @@ createOrder = async (req, res) => {
   await addOrderTotalPrice(order);
   await addOrderProductsTotalPrice(order);
 
-  order aa
+  console.log('as')
+
+  order 
     .save()
     .then(() => {
       await findAndUpdateContactWithOrder(order._doc);
