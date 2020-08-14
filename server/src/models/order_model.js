@@ -27,6 +27,7 @@ const Order = new Schema(
         preco: {
           type: Number,
         },
+        produtos_preco_total: Number,
       },
     ],
     preco_total: Number,

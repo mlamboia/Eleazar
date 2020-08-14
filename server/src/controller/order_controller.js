@@ -2,7 +2,7 @@ const Order = require('../models/order_model');
 const Contact = require('../models/contact_model');
 const assert = require('assert');
 
-createOrder = (req, res) => {
+createOrder = async (req, res) => {
   const body = req.body;
 
   if (!body) {
@@ -21,13 +21,14 @@ createOrder = (req, res) => {
     });
   }
 
-  addOrderTotalQuantity(order._doc);
-  addOrderTotalPrice(order);
+  await addOrderTotalQuantity(order._doc);
+  await addOrderTotalPrice(order);
+  await addOrderProductsTotalPrice(order);
 
   order
     .save()
     .then(() => {
-      findAndUpdateContactWithOrder(order._doc);
+      await findAndUpdateContactWithOrder(order._doc);
 
       return res.status(201).json({
         success: true,
@@ -53,32 +54,47 @@ findAndUpdateContactWithOrder = async (order) => {
   }
 };
 
-addOrderTotalPrice = (order) => {
-  order
-    .populate('produtos.products', 'nome preco_unidade')
-    .execPopulate((err, order) => {
-      try {
-        order.produtos.reduce((acc, cur, i) => {
-          console.log(acc.products.preco_unidade + cur.products.preco_unidade);
-        });
-      } catch (err) {
-        console.log(err);
-      }
-    });
+addOrderTotalPrice = async (order) => {
+  try {
+    await order
+      .populate('produtos.products', 'nome preco_unidade')
+      .execPopulate();
+
+    const precoTotal = order.produtos.reduce((acc, cur) => {
+      return acc + cur.products.preco_unidade * cur.quantidade;
+    }, 0);
+
+    order.preco_total = precoTotal;
+  } catch (err) {
+    console.log(err);
+  }
 };
 
 addOrderTotalQuantity = (order) => {
   try {
-    order.produtos.reduce((acc, cur) => {
-      return (order.quantidade_total_produtos =
-        acc.quantidade + cur.quantidade);
-    });
+    const quantidadeTotal = order.produtos.reduce((acc, cur) => {
+      return acc + cur.quantidade;
+    }, 0);
+    order.quantidade_total_produtos = quantidadeTotal;
   } catch (err) {
     console.error(err);
   }
 };
 
-addOrderProductsTotalPrice = () => {};
+addOrderProductsTotalPrice = async (order) => {
+  try {
+    await order
+      .populate('produtos.products', 'nome preco_unidade')
+      .execPopulate();
+
+    order.produtos.reduce((acc, cur) => {
+      const produtoPrecoTotal = cur.products.preco_unidade * cur.quantidade;
+      cur.produtos_preco_total = produtoPrecoTotal;
+    }, 0);
+  } catch (err) {
+    console.log(err);
+  }
+};
 
 updateOrder = async (req, res) => {
   const body = req.body;
