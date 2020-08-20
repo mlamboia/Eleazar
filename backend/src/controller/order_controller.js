@@ -1,5 +1,5 @@
 const Order = require('../model/order_model');
-const Contact = require('../model/contact_model');
+const Client = require('../model/client_model');
 
 createOrder = async (req, res) => {
   const body = req.body;
@@ -27,7 +27,7 @@ createOrder = async (req, res) => {
   order
     .save()
     .then(async () => {
-      await findAndUpdateContactWithOrder(order._doc);
+      await findAndUpdateClientWithOrder(res, order._doc);
 
       return res.status(201).json({
         success: true,
@@ -43,27 +43,27 @@ createOrder = async (req, res) => {
     });
 };
 
-findAndUpdateContactWithOrder = async (order) => {
+findAndUpdateClientWithOrder = async (res, order) => {
   try {
-    const contact = await Contact.findOne({ _id: order.contact });
-    contact.orders.push(order._id);
-    contact.save();
+    const client = await Client.findOne({ _id: order.client });
+    client.orders.push(order._id);
+
+    client.save();
   } catch (err) {
-    console.error(err);
+    return res.status(400).json({
+      error: err,
+      message: 'Falha ao criar um Pedido!',
+    });
   }
 };
 
-addOrderTotalPrice = async (res, order) => {
+addOrderTotalPrice = (res, order) => {
   try {
-    await order.populate('products.products', 'name unit_price').execPopulate();
-
     const totalPrice = order.products.reduce((acc, cur) => {
-      return acc + cur.products.unit_price * cur.quantity;
+      return acc + cur.unit_price * cur.quantity;
     }, 0);
 
-    // if (totalPrice <= 0) throw new Error();
-
-    order.total_price = totalPrice;
+    order.order_total_price = totalPrice;
   } catch (err) {
     return res.status(400).json({
       error: err,
@@ -78,8 +78,6 @@ addOrderTotalQuantity = (res, order) => {
       return acc + cur.quantity;
     }, 0);
 
-    // if (totalQuantity <= 0) throw new Error();
-
     order.products_total_quantity = totalQuantity;
   } catch (err) {
     return res.status(400).json({
@@ -89,14 +87,10 @@ addOrderTotalQuantity = (res, order) => {
   }
 };
 
-addOrderProductsTotalPrice = async (res, order) => {
+addOrderProductsTotalPrice = (res, order) => {
   try {
-    await order.populate('products.products', 'name unit_price').execPopulate();
-
-    order.products.reduce((acc, cur) => {
-      const productsTotalPrice = cur.products.unit_price * cur.quantity;
-
-      // if (productsTotalPrice <= 0) throw new Error();
+    order.products.reduce(async (acc, cur) => {
+      const productsTotalPrice = (await cur.unit_price) * cur.quantity;
 
       cur.products_total_price = productsTotalPrice;
     }, 0);
@@ -148,7 +142,7 @@ updateOrder = async (req, res) => {
 
 getOrderById = async (req, res) => {
   await Order.findOne({ _id: req.params.id })
-    .populate('contact', 'name neighborhood adress deliverer_fee phone')
+    .populate('client', 'name neighborhood adress deliverer_fee phone')
     .populate('deliverer', 'name')
     .populate('products.products', 'name unit_price')
     .exec((err, order) => {
@@ -175,7 +169,7 @@ getOrderById = async (req, res) => {
 
 getOrders = async (req, res) => {
   await Order.find({})
-    .populate('contact', 'id name neighborhood address deliverer_fee phone')
+    .populate('client', 'id name neighborhood address deliverer_fee phone')
     .populate('deliverer', 'id name')
     .populate('products.products', 'name unit_price')
     .exec((err, orders) => {
