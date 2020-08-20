@@ -1,17 +1,18 @@
 const mongoose = require('mongoose');
+const { ObjectID } = require('mongodb');
 const Schema = mongoose.Schema;
 
 const Order = new Schema(
   {
     client: {
-      type: String,
+      type: Schema.Types.ObjectId,
       ref: 'clients',
       minlength: [24, 'Digite um id de contato válido!'],
       maxlength: [24, 'Digite um id de contato válido!'],
       required: [true, 'É necessário um contato!'],
     },
     deliverer: {
-      type: String,
+      type: Schema.Types.ObjectId,
       ref: 'deliverers',
       minlength: [24, 'Digite um id de entregador válido!'],
       maxlength: [24, 'Digite um id de entregador válido!'],

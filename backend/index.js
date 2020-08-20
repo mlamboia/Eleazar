@@ -8,6 +8,7 @@ const clientRouter = require('./src/route/client_router');
 const delivererRouter = require('./src/route/deliverer_router');
 const productRouter = require('./src/route/product_router');
 const orderRouter = require('./src/route/order_router');
+const errorHandler = require('./src/middleware/errorHandler');
 
 const app = express();
 app.disable('x-powered-by');
@@ -21,6 +22,7 @@ app.use('/api', clientRouter);
 app.use('/api', delivererRouter);
 app.use('/api', productRouter);
 app.use('/api', orderRouter);
+app.use(errorHandler);
 
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 

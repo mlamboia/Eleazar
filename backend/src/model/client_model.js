@@ -42,7 +42,7 @@ const Client = new Schema(
     },
     orders: [
       {
-        type: String,
+        type: Schema.Types.ObjectId,
         minlength: [24, 'Digite um id de pedido válido!'],
         maxlength: [24, 'Digite um id de pedido válido!'],
         ref: 'orders',
