@@ -4,8 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon index.js",
-    "test": "jest"
+    "start": "node src/server.js",
+    "dev": "nodemon src/server.js",
+    "test": "jest --watch"
   },
   "keywords": [],
   "author": "",
@@ -15,11 +16,13 @@
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
-    "mongodb": "^3.6.0",
     "mongoose": "^5.9.24",
-    "nodemon": "^2.0.4"
+    "factory-girl": "^5.0.4",
+    "faker": "^4.1.0"
   },
   "devDependencies": {
-    "jest": "^26.4.0"
+    "jest": "^26.4.0",
+    "supertest": "^4.0.2",
+    "nodemon": "^2.0.4"
   }
 }

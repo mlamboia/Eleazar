@@ -2,12 +2,8 @@ const Order = require('../model/order_model');
 const Client = require('../model/client_model');
 
 class OrderService {
-  constructor(req, res) {
-    (this.req = req), (this.body = req.body), (this.id = req.params.id);
-  }
-
-  async create() {
-    const order = new Order(this.body);
+  async create(body) {
+    const order = new Order(body);
     await addOrderTotalQuantity(order._doc);
     await addOrderTotalPrice(order);
     await addOrderProductsTotalPrice(order);
@@ -36,28 +32,28 @@ class OrderService {
     }, 0);
   }
 
-  async findAndUpdateClientWithOrder(res, order) {
+  async findAndUpdateClientWithOrder(order) {
     const client = await Client.findOne({ _id: order.client });
     client.orders.push(order._id);
     await client.save();
   }
 
-  async update() {
-    await Order.findOne({ _id: this.id }, async (order) => {
-      Object.assign(order, this.body);
+  async update(id, body) {
+    await Order.findOne({ _id: id }, async (order) => {
+      Object.assign(order, body);
       await order.save();
     });
   }
 
-  async findOrder() {
-    return await Order.findOne({ _id: req.params.id })
+  async findOrder(id) {
+    return await Order.findOne({ _id: id })
       .populate('client', 'name neighborhood adress deliverer_fee phone')
       .populate('deliverer', 'name')
       .populate('products.products', 'name unit_price')
       .exec();
   }
 
-  async findOrders() {
+  async findOrders(id) {
     return await Order.find({})
       .populate('client', 'id name neighborhood address deliverer_fee phone')
       .populate('deliverer', 'id name')
@@ -66,4 +62,4 @@ class OrderService {
   }
 }
 
-module.exports = OrderService;
+module.exports = new OrderService();

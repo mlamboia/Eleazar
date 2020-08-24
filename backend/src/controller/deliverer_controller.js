@@ -1,12 +1,11 @@
 const DelivererService = require('../service/deliverer_service');
 
 createDeliverer = async (req, res, next) => {
-  await new DelivererService(req)
-    .create()
+  console.log(req.body);
+  await DelivererService.create(req.body)
     .then(() => {
       return res.status(201).json({
         success: true,
-        id: deliverer._id,
         message: 'Entregador criado com sucesso!',
       });
     })
@@ -14,12 +13,10 @@ createDeliverer = async (req, res, next) => {
 };
 
 updateDeliverer = async (req, res, next) => {
-  await new DelivererService(req)
-    .update()
+  await DelivererService.update(req.params.id, req.body)
     .then(() => {
       return res.status(200).json({
         success: true,
-        id: deliverer._id,
         message: 'Entregador atualizado!',
       });
     })
@@ -27,8 +24,7 @@ updateDeliverer = async (req, res, next) => {
 };
 
 blockDeliverer = async (req, res, next) => {
-  await new DelivererService(req)
-    .block()
+  await DelivererService.block(req.params.id)
     .then(() => {
       return res.status(200).json({
         success: true,
@@ -39,8 +35,7 @@ blockDeliverer = async (req, res, next) => {
 };
 
 unblockDeliverer = async (req, res, next) => {
-  await new DelivererService(req)
-    .unblock()
+  await DelivererService.unblock(req.params.id)
     .then(() => {
       return res.status(200).json({
         success: true,
@@ -51,8 +46,7 @@ unblockDeliverer = async (req, res, next) => {
 };
 
 getDelivererById = async (req, res, next) => {
-  await new DelivererService(req)
-    .findDeliverer()
+  await DelivererService.findDeliverer(req.params.id)
     .then((deliverer) => {
       if (deliverer.blocked == true) {
         return res.status(404).json({
@@ -69,8 +63,7 @@ getDelivererById = async (req, res, next) => {
 };
 
 getDeliverers = async (req, res, next) => {
-  await new DelivererService(req)
-    .findDeliverers()
+  await DelivererService.findDeliverers()
     .then((deliverers) => {
       if (!deliverers.length) {
         return res.status(404).json({

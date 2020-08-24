@@ -1,39 +1,35 @@
 const Client = require('../model/client_model');
 
 class ClientService {
-  constructor(req) {
-    (this.body = req.body), (this.id = req.params.id);
-  }
-
-  async create() {
-    const client = new Client(this.body);
+  async create(body) {
+    console.log(body);
+    const client = new Client(body);
     await client.save();
   }
 
-  async update() {
-    await Client.findOne({ _id: this.id }, async (client) => {
-      Object.assign(client, this.body);
+  async update(id, body) {
+    await Client.findOne({ _id: id }, async (client) => {
+      Object.assign(client, body);
       await client.save();
     });
   }
 
-  async block() {
-    await Client.findOne({ _id: this.id, blocked: false }, (client) => {
+  async block(id) {
+    await Client.findOne({ _id: id, blocked: false }, (client) => {
       client.blocked = true;
       client.save();
     });
   }
 
-  async unblock() {
-    await Client.findOne({ _id: this.id, blocked: true }, (client) => {
-      console.log(client);
+  async unblock(id) {
+    await Client.findOne({ _id: id, blocked: true }, (client) => {
       client.blocked = false;
       client.save();
     });
   }
 
-  async findClient() {
-    return await Client.findOne({ _id: this.id })
+  async findClient(id) {
+    return await Client.findOne({ _id: id })
       .populate({
         path: 'orders',
         select: 'deliverer products products_total_quantity order_total_price',
@@ -53,4 +49,4 @@ class ClientService {
   }
 }
 
-module.exports = ClientService;
+module.exports = new ClientService();

@@ -1,8 +1,7 @@
 const OrderService = require('../service/order_service');
 
 createOrder = async (req, res, next) => {
-  await new OrderService(req)
-    .create()
+  await OrderService.create(req.body)
     .then(() => {
       return res.status(201).json({
         success: true,
@@ -13,8 +12,7 @@ createOrder = async (req, res, next) => {
 };
 
 updateOrder = async (req, res, next) => {
-  await new OrderService(req)
-    .update()
+  await OrderService.update(req.params.id, req.body)
     .then(() => {
       return res.status(200).json({
         success: true,
@@ -25,8 +23,7 @@ updateOrder = async (req, res, next) => {
 };
 
 getOrderById = async (req, res, next) => {
-  await new OrderService(req)
-    .findOrder()
+  await OrderService.findOrder(req.params.id)
     .then((order) => {
       return res.status(200).json({
         success: true,
@@ -37,8 +34,7 @@ getOrderById = async (req, res, next) => {
 };
 
 getOrders = async (req, res, next) => {
-  await new OrderService(req)
-    .findOrders()
+  await OrderService.findOrders()
     .then((orders) => {
       if (!orders.length) {
         return res.status(404).json({

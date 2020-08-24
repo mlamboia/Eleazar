@@ -1,8 +1,7 @@
 const ClientService = require('../service/client_service');
 
 createClient = async (req, res, next) => {
-  await new ClientService(req)
-    .create(req)
+  await ClientService.create(req.body)
     .then(() => {
       return res.status(201).json({
         success: true,
@@ -13,8 +12,7 @@ createClient = async (req, res, next) => {
 };
 
 updateClient = async (req, res, next) => {
-  await new ClientService(req)
-    .update()
+  await ClientService.update(req.params.id, req.body)
     .then(() => {
       return res.status(200).json({
         success: true,
@@ -25,8 +23,7 @@ updateClient = async (req, res, next) => {
 };
 
 blockClient = async (req, res, next) => {
-  await new ClientService(req)
-    .block()
+  await ClientService.block(req.params.id)
     .then(() => {
       return res.status(200).json({
         success: true,
@@ -37,8 +34,7 @@ blockClient = async (req, res, next) => {
 };
 
 unblockClient = async (req, res, next) => {
-  await new ClientService(req)
-    .unblock()
+  await ClientService.unblock(req.params.id)
     .then(() => {
       return res.status(200).json({
         success: true,
@@ -49,8 +45,7 @@ unblockClient = async (req, res, next) => {
 };
 
 getClientById = async (req, res, next) => {
-  await new ClientService(req)
-    .findClient()
+  await ClientService.findClient(req.params.id)
     .then((client) => {
       if (client.blocked == true) {
         return res.status(404).json({
@@ -67,8 +62,7 @@ getClientById = async (req, res, next) => {
 };
 
 getClients = async (req, res, next) => {
-  await new ClientService(req)
-    .findClients()
+  await ClientService.findClients()
     .then((clients) => {
       if (!clients.length) {
         return res.status(404).json({

@@ -1,41 +1,37 @@
 const Product = require('../model/product_model');
 
 class ProductService {
-  constructor(req) {
-    (this.body = req.body), (this.id = req.params.id);
-  }
-
-  async create() {
+  async create(body) {
     const product = new Product(body);
     await product.save();
   }
 
-  async update() {
-    await Product.findOne({ _id: this.id }, async (product) => {
-      Object.assign(product, this.body);
+  async update(id, body) {
+    await Product.findOne({ _id: id }, async (product) => {
+      Object.assign(product, body);
       await product.save();
     });
   }
 
-  async block() {
-    await Product.findOne({ _id: this.id, blocked: false });
+  async block(id) {
+    await Product.findOne({ _id: id, blocked: false });
     product.blocked = true;
     await product.save();
   }
 
-  async unblock() {
-    await Product.findOne({ _id: this.id, blocked: true });
+  async unblock(id) {
+    await Product.findOne({ _id: id, blocked: true });
     product.blocked = false;
     await product.save();
   }
 
-  async findProduct() {
-    return await Product.findOne({ _id: this.id });
+  async findProduct(id) {
+    return await Product.findOne({ _id: id });
   }
 
-  async findProducts() {
+  async findProducts(id) {
     return await Product.find({ blocked: false });
   }
 }
 
-module.exports = ProductService;
+module.exports = new ProductService();

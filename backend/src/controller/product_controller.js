@@ -1,8 +1,7 @@
 const ProductService = require('../service/product_service');
 
 createProduct = (req, res, next) => {
-  new ProductService(req)
-    .create()
+  ProductService.create(req.body)
     .then(() => {
       return res.status(201).json({
         success: true,
@@ -13,8 +12,7 @@ createProduct = (req, res, next) => {
 };
 
 updateProduct = async (req, res, next) => {
-  new ProductService(req)
-    .update()
+  ProductService.update(req.params.id, req.body)
     .then(() => {
       return res.status(200).json({
         success: true,
@@ -25,8 +23,7 @@ updateProduct = async (req, res, next) => {
 };
 
 blockProduct = async (req, res, next) => {
-  new ProductService(req)
-    .block()
+  ProductService.block(req.params.id)
     .then(() => {
       return res.status(200).json({
         success: true,
@@ -37,8 +34,7 @@ blockProduct = async (req, res, next) => {
 };
 
 unblockProduct = async (req, res, next) => {
-  new ProductService(req)
-    .unblock()
+  ProductService.unblock(req.params.id)
     .then(() => {
       return res.status(200).json({
         success: true,
@@ -49,8 +45,7 @@ unblockProduct = async (req, res, next) => {
 };
 
 getProductById = async (req, res, next) => {
-  await new ProductService(req)
-    .findProduct()
+  await ProductService.findProduct(req.params.id)
     .then((product) => {
       if (product.blocked == true) {
         return res.status(404).json({
@@ -67,8 +62,7 @@ getProductById = async (req, res, next) => {
 };
 
 getProducts = async (req, res, next) => {
-  await new ProductService(req)
-    .findProducts()
+  await ProductService.findProducts()
     .then((products) => {
       if (!products.length) {
         return res.status(404).json({
