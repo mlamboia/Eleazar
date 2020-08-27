@@ -1,21 +1,19 @@
 const mongoose = require('mongoose');
-const { ObjectID } = require('mongodb');
 const Schema = mongoose.Schema;
+const { isLength, valueIsArray } = require('../helper/custom_validators');
 
 const Order = new Schema(
   {
     client: {
       type: Schema.Types.ObjectId,
       ref: 'clients',
-      minlength: [24, 'Digite um id de contato válido!'],
-      maxlength: [24, 'Digite um id de contato válido!'],
-      required: [true, 'É necessário um contato!'],
+      validate: isLength(24, 'Digite um id de client válido!'),
+      required: [true, 'É necessário um client!'],
     },
     deliverer: {
       type: Schema.Types.ObjectId,
       ref: 'deliverers',
-      minlength: [24, 'Digite um id de entregador válido!'],
-      maxlength: [24, 'Digite um id de entregador válido!'],
+      validate: isLength(24, 'Digite um id de client válido!'),
       required: [true, 'É necessário um entregador!'],
     },
     products: {
@@ -28,10 +26,7 @@ const Order = new Schema(
           _id: false,
         },
       ],
-      validate: [
-        (v) => Array.isArray(v) && v.length > 0,
-        'É necessário uma lista de produtos',
-      ],
+      validate: valueIsArray('É necessário uma lista de produtos'),
     },
     order_total_price: Number,
     products_total_quantity: Number,

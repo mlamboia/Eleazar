@@ -1,13 +1,16 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const { maxLength, minLength } = require('../helper/custom_validators');
 
 const Product = new Schema(
   {
     name: {
       type: String,
       required: [true, 'É necessário o nome do produto!'],
-      minlength: [1, 'O nome do produto deve possuir mais de 1 caractere!'],
-      maxlength: [50, 'O nome do produto deve possuir menos de 50 caracteres!'],
+      validate: [
+        minLength(4, 'O nome do produto deve possuir mais de 4 caracteres!'),
+        maxLength(50, 'O nome do produto deve possuir menos de 50 caracteres!'),
+      ],
       unique: true,
     },
     unit_price: {

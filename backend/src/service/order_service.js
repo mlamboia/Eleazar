@@ -3,12 +3,16 @@ const Client = require('../model/client_model');
 
 class OrderService {
   async create(body) {
-    const order = new Order(body);
-    await addOrderTotalQuantity(order._doc);
-    await addOrderTotalPrice(order);
-    await addOrderProductsTotalPrice(order);
-    await order.save();
-    await findAndUpdateClientWithOrder(order._doc);
+    try {
+      const order = await new Order(body);
+      await this.addOrderTotalQuantity(order._doc);
+      await this.addOrderTotalPrice(order);
+      await this.addOrderProductsTotalPrice(order);
+      await order.save();
+      await this.findAndUpdateClientWithOrder(order._doc);
+    } catch (e) {
+      throw 'Client ou Entregador não existentes';
+    }
   }
 
   async addOrderTotalPrice(order) {

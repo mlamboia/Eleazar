@@ -1,5 +1,5 @@
 /node_modules
 Dockerfile
 .dockerignore
-docker-compose
+docker-compose.yml
 package-lock

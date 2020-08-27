@@ -11,14 +11,12 @@ factory.define('Client', Client, {
   city: faker.address.city(),
   neighborhood: faker.address.streetName(),
   address: faker.address.streetAddress(),
-  deliverer_fee: faker.commerce.price(),
-  phone: faker.phone.phoneNumber(),
-  blocked: faker.random.boolean(),
+  phone: faker.random.number({ min: 900000000, max: 999999999 }),
+  deliverer_fee: faker.random.number({ min: 0, max: 10 }),
 });
 
 factory.define('Deliverer', Deliverer, {
   name: faker.name.findName(),
-  blocked: faker.random.boolean(),
 });
 
 factory.define('Order', Order, {
@@ -42,8 +40,6 @@ factory.define('Product', Product, {
   name: faker.commerce.productName(),
   unit_price: faker.random.number({ min: 10, max: 30 }),
   observation: faker.lorem.sentence(),
-  dish_day: faker.random.boolean(),
-  blocked: faker.random.boolean(),
 });
 
 module.exports = factory;

@@ -2,7 +2,6 @@ const Client = require('../model/client_model');
 
 class ClientService {
   async create(body) {
-    console.log(body);
     const client = new Client(body);
     await client.save();
   }
