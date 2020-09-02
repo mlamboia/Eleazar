@@ -1,6 +1,7 @@
 const app = require('../../src/app');
 const db = require('../../src/database/index');
 const factory = require('../factories');
+const ClientService = require('../../src/service/client_service');
 
 describe('Client', () => {
   beforeAll(async () => {
@@ -17,28 +18,28 @@ describe('Client', () => {
   });
 
   it('should not be able to create client with null field', async () => {
-    const client = await factory.create('Client', {
+    await ClientService.create({
       name: 'Matheus Viana',
       city: 'Osasco',
       neighborhood: 'Km 18',
       address: 'Rua Gasparino Lunardi, 252',
       phone: '984160601',
       deliverer_fee: 3,
+    }).then((client) => {
+      expect(client.name).toBe('Matheus Viana');
+      expect(client.city).toBe('Osasco');
+      expect(client.neighborhood).toBe('Km 18');
+      expect(client.address).toBe('Rua Gasparino Lunardi, 252');
+      expect(client.deliverer_fee).toBe(3);
+      expect(client.phone).toBe('984160601');
+      expect(client.orders.length).toBe(0);
+      expect(client.blocked).toBeFalsy();
     });
-
-    expect(client.name).toBe('Matheus Viana');
-    expect(client.city).toBe('Osasco');
-    expect(client.neighborhood).toBe('Km 18');
-    expect(client.address).toBe('Rua Gasparino Lunardi, 252');
-    expect(client.deliverer_fee).toBe(3);
-    expect(client.phone).toBe('984160601');
-    expect(client.orders.length).toBe(0);
-    expect(client.blocked).toBeFalsy();
   });
 
   it('should be able to create client with undefined fields', async () => {
     try {
-      await factory.create('Client', {
+      await ClientService.create({
         name: undefined,
         city: undefined,
         neighborhood: undefined,
@@ -71,11 +72,12 @@ describe('Client', () => {
 
   it('should not be able to create client with fields that have less characters than necessary', async () => {
     try {
-      await factory.create('Client', {
+      await ClientService.create({
         name: 'aaa',
         city: 'aaa',
         neighborhood: 'aaa',
         address: 'aaa',
+        phone: '984160601',
         deliverer_fee: -1,
       });
       expect(true).toBe(false);
@@ -127,13 +129,13 @@ describe('Client', () => {
     await factory.create('Client', {
       phone: '984160601',
     });
-    try {
-      await factory.create('Client', {
+
+    await factory
+      .create('Client', {
         phone: '984160601',
+      })
+      .catch(async (e) => {
+        await expect(e.code).toBe(11000);
       });
-      expect(true).toBe(false);
-    } catch (e) {
-      expect(e.code).toBe(11000);
-    }
   });
 });

@@ -1,7 +1,6 @@
 const app = require('../../src/app');
 const db = require('../../src/database/index');
 const factory = require('../factories');
-const { address } = require('faker');
 
 describe('Product', () => {
   beforeAll(async () => {
@@ -82,13 +81,14 @@ describe('Product', () => {
     await factory.create('Product', {
       name: 'Marmitex',
     });
-    try {
-      await factory.create('Product', {
+
+    await factory
+      .create('Product', {
         name: 'Marmitex',
+      })
+
+      .catch(async (e) => {
+        await expect(e.code).toBe(11000);
       });
-      expect(true).toBe(false);
-    } catch (e) {
-      expect(e.code).toBe(11000);
-    }
   });
 });

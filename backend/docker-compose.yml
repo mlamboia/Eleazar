@@ -21,3 +21,5 @@ services:
     command: --quiet
     volumes:
       - ./data/db:/data/db:z
+      
+    mongodb://ADMIN:123456@127.0.0.1:27017/eleazar

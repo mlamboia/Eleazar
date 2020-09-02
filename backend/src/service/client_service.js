@@ -3,27 +3,27 @@ const Client = require('../model/client_model');
 class ClientService {
   async create(body) {
     const client = new Client(body);
-    await client.save();
+    return await client.save();
   }
 
   async update(id, body) {
     await Client.findOne({ _id: id }, async (client) => {
       Object.assign(client, body);
-      await client.save();
+      return await client.save();
     });
   }
 
   async block(id) {
     await Client.findOne({ _id: id, blocked: false }, (client) => {
       client.blocked = true;
-      client.save();
+      return client.save();
     });
   }
 
   async unblock(id) {
     await Client.findOne({ _id: id, blocked: true }, (client) => {
       client.blocked = false;
-      client.save();
+      return client.save();
     });
   }
 
