@@ -1,6 +1,6 @@
 const app = require('../../src/app');
 const db = require('../../src/database/index');
-const factory = require('../factories');
+const ProductService = require('../../src/service/product_service');
 
 describe('Product', () => {
   beforeAll(async () => {
@@ -17,7 +17,7 @@ describe('Product', () => {
   });
 
   it('should be able to create product', async () => {
-    const product = await factory.create('Product', {
+    const product = await ProductService.create({
       name: 'Marmitex',
       unit_price: 15,
       observation: 'Observação',
@@ -32,10 +32,7 @@ describe('Product', () => {
 
   it('should not be able to create deliverer with undefined fields', async () => {
     try {
-      await factory.create('Product', {
-        name: undefined,
-        unit_price: undefined,
-      });
+      await ProductService.create();
       expect(true).toBe(false);
     } catch (e) {
       expect(e.errors.name.properties.message).toBe(
@@ -49,7 +46,7 @@ describe('Product', () => {
 
   it('should not be able to create product with fields that have less characters than necessary', async () => {
     try {
-      await factory.create('Product', {
+      await ProductService.create({
         name: 'aaa',
         unit_price: 0,
       });
@@ -66,8 +63,9 @@ describe('Product', () => {
 
   it('should not be able to create product with fields that have more characters than necessary', async () => {
     try {
-      await factory.create('Product', {
+      await ProductService.create({
         name: 'a'.repeat(51),
+        unit_price: 15,
       });
       expect(true).toBe(false);
     } catch (e) {
@@ -78,17 +76,16 @@ describe('Product', () => {
   });
 
   it('should not be able to create two products with same name', async () => {
-    await factory.create('Product', {
+    await ProductService.create({
       name: 'Marmitex',
+      unit_price: 15,
     });
 
-    await factory
-      .create('Product', {
-        name: 'Marmitex',
-      })
-
-      .catch(async (e) => {
-        await expect(e.code).toBe(11000);
-      });
+    ProductService.create({
+      name: 'Marmitex',
+      unit_price: 15,
+    }).catch(async (e) => {
+      await expect(e.code).toBe(11000);
+    });
   });
 });

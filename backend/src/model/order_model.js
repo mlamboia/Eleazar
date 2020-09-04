@@ -8,7 +8,7 @@ const Order = new Schema(
       type: Schema.Types.ObjectId,
       ref: 'clients',
       validate: isLength(24, 'Digite um id de client válido!'),
-      required: [true, 'É necessário um client!'],
+      required: [true, 'É necessário um cliente!'],
     },
     deliverer: {
       type: Schema.Types.ObjectId,

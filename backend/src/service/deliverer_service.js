@@ -3,28 +3,25 @@ const Deliverer = require('../model/deliverer_model');
 class DelivererService {
   async create(body) {
     const deliverer = new Deliverer(body);
-    await deliverer.save();
+    return await deliverer.save();
   }
 
   async update(id, body) {
-    await Deliverer.findOne({ _id: id }, async (deliverer) => {
-      await Object.assign(deliverer, body);
-      deliverer.save();
-    });
+    const deliverer = await Deliverer.findOne({ _id: id });
+    await Object.assign(deliverer, body);
+    return await deliverer.save();
   }
 
   async block(id) {
-    await Deliverer.findOne({ _id: id, blocked: false }, (deliverer) => {
-      deliverer.blocked = true;
-      deliverer.save();
-    });
+    const deliverer = await Deliverer.findOne({ _id: id, blocked: false });
+    deliverer.blocked = true;
+    return await deliverer.save();
   }
 
   async unblock(id) {
-    await Deliverer.findOne({ _id: id, blocked: true }, (deliverer) => {
-      deliverer.blocked = false;
-      deliverer.save();
-    });
+    const deliverer = await Deliverer.findOne({ _id: id, blocked: true });
+    deliverer.blocked = false;
+    return await deliverer.save();
   }
 
   async findDeliverer(id) {

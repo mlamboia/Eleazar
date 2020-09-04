@@ -7,24 +7,21 @@ class ClientService {
   }
 
   async update(id, body) {
-    await Client.findOne({ _id: id }, async (client) => {
-      Object.assign(client, body);
-      return await client.save();
-    });
+    const client = await Client.findOne({ _id: id });
+    Object.assign(client, body);
+    return await client.save();
   }
 
   async block(id) {
-    await Client.findOne({ _id: id, blocked: false }, (client) => {
-      client.blocked = true;
-      return client.save();
-    });
+    const client = await Client.findOne({ _id: id, blocked: false });
+    client.blocked = true;
+    return await client.save();
   }
 
   async unblock(id) {
-    await Client.findOne({ _id: id, blocked: true }, (client) => {
-      client.blocked = false;
-      return client.save();
-    });
+    const client = await Client.findOne({ _id: id, blocked: true });
+    client.blocked = false;
+    return await client.save();
   }
 
   async findClient(id) {

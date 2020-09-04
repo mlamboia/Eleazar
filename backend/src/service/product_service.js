@@ -3,26 +3,25 @@ const Product = require('../model/product_model');
 class ProductService {
   async create(body) {
     const product = new Product(body);
-    await product.save();
+    return await product.save();
   }
 
   async update(id, body) {
-    await Product.findOne({ _id: id }, async (product) => {
-      Object.assign(product, body);
-      await product.save();
-    });
+    const product = await Product.findOne({ _id: id });
+    Object.assign(product, body);
+    return await product.save();
   }
 
   async block(id) {
-    await Product.findOne({ _id: id, blocked: false });
+    const product = await Product.findOne({ _id: id, blocked: false });
     product.blocked = true;
-    await product.save();
+    return await product.save();
   }
 
   async unblock(id) {
-    await Product.findOne({ _id: id, blocked: true });
+    const product = await Product.findOne({ _id: id, blocked: true });
     product.blocked = false;
-    await product.save();
+    return await product.save();
   }
 
   async findProduct(id) {

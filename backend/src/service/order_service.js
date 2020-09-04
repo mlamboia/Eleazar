@@ -3,16 +3,13 @@ const Client = require('../model/client_model');
 
 class OrderService {
   async create(body) {
-    try {
-      const order = await new Order(body);
-      await this.addOrderTotalQuantity(order._doc);
-      await this.addOrderTotalPrice(order);
-      await this.addOrderProductsTotalPrice(order);
-      await order.save();
-      await this.findAndUpdateClientWithOrder(order._doc);
-    } catch (e) {
-      throw 'Client ou Entregador não existentes';
-    }
+    const order = await new Order(body);
+    await this.addOrderTotalQuantity(order._doc);
+    await this.addOrderTotalPrice(order);
+    await this.addOrderProductsTotalPrice(order);
+    await order.save();
+    await this.findAndUpdateClientWithOrder(order._doc);
+    return order;
   }
 
   async addOrderTotalPrice(order) {
@@ -43,10 +40,9 @@ class OrderService {
   }
 
   async update(id, body) {
-    await Order.findOne({ _id: id }, async (order) => {
-      Object.assign(order, body);
-      await order.save();
-    });
+    const order = await Order.findOne({ _id: id });
+    Object.assign(order, body);
+    return await order.save();
   }
 
   async findOrder(id) {

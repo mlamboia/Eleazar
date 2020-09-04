@@ -1,6 +1,5 @@
 const app = require('../../src/app');
 const db = require('../../src/database/index');
-const factory = require('../factories');
 const ClientService = require('../../src/service/client_service');
 
 describe('Client', () => {
@@ -17,7 +16,7 @@ describe('Client', () => {
     db.disconnect();
   });
 
-  it('should not be able to create client with null field', async () => {
+  it('should be able to create client with valid fields', async () => {
     await ClientService.create({
       name: 'Matheus Viana',
       city: 'Osasco',
@@ -37,16 +36,9 @@ describe('Client', () => {
     });
   });
 
-  it('should be able to create client with undefined fields', async () => {
+  it('should not be able to create client with undefined fields', async () => {
     try {
-      await ClientService.create({
-        name: undefined,
-        city: undefined,
-        neighborhood: undefined,
-        address: undefined,
-        phone: undefined,
-        deliverer_fee: undefined,
-      });
+      await ClientService.create();
       expect(true).toBe(false);
     } catch (e) {
       expect(e.errors.name.properties.message).toBe(
@@ -70,7 +62,7 @@ describe('Client', () => {
     }
   });
 
-  it('should not be able to create client with fields that have less characters than necessary', async () => {
+  it('should not be able to create client with fields that have less characters or lower value than necessary', async () => {
     try {
       await ClientService.create({
         name: 'aaa',
@@ -102,11 +94,13 @@ describe('Client', () => {
 
   it('should not be able to create client with fields that have more characters than necessary', async () => {
     try {
-      await factory.create('Client', {
+      await ClientService.create({
         name: 'a'.repeat(51),
         city: 'a'.repeat(51),
         neighborhood: 'a'.repeat(51),
         address: 'a'.repeat(101),
+        phone: '984160601',
+        deliverer_fee: 3,
       });
       expect(true).toBe(false);
     } catch (e) {
@@ -126,16 +120,24 @@ describe('Client', () => {
   });
 
   it('should not be able to create two clients with same phone number', async () => {
-    await factory.create('Client', {
+    await ClientService.create({
+      name: 'Matheus Viana',
+      city: 'Osasco',
+      neighborhood: 'Km 18',
+      address: 'Rua Gasparino Lunardi, 252',
       phone: '984160601',
+      deliverer_fee: 3,
     });
 
-    await factory
-      .create('Client', {
-        phone: '984160601',
-      })
-      .catch(async (e) => {
-        await expect(e.code).toBe(11000);
-      });
+    await ClientService.create({
+      name: 'Matheus Viana',
+      city: 'Osasco',
+      neighborhood: 'Km 18',
+      address: 'Rua Gasparino Lunardi, 252',
+      phone: '984160601',
+      deliverer_fee: 3,
+    }).catch(async (e) => {
+      await expect(e.code).toBe(11000);
+    });
   });
 });

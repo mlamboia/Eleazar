@@ -1,6 +1,6 @@
 const app = require('../../src/app');
 const db = require('../../src/database/index');
-const factory = require('../factories');
+const DelivererService = require('../../src/service/deliverer_service');
 
 describe('Deliverer', () => {
   beforeAll(async () => {
@@ -17,7 +17,7 @@ describe('Deliverer', () => {
   });
 
   it('should be able to create deliverer', async () => {
-    const deliverer = await factory.create('Deliverer', {
+    const deliverer = await DelivererService.create({
       name: 'Matheus Viana',
     });
 
@@ -27,9 +27,7 @@ describe('Deliverer', () => {
 
   it('should not be able to create deliverer with undefined fields', async () => {
     try {
-      await factory.create('Deliverer', {
-        name: undefined,
-      });
+      await DelivererService.create();
       expect(true).toBe(false);
     } catch (e) {
       expect(e.errors.name.properties.message).toBe(
@@ -40,7 +38,7 @@ describe('Deliverer', () => {
 
   it('should not be able to create deliverer with fields that have less characters than necessary', async () => {
     try {
-      await factory.create('Deliverer', {
+      await DelivererService.create({
         name: 'aaa',
       });
       expect(true).toBe(false);
@@ -53,7 +51,7 @@ describe('Deliverer', () => {
 
   it('should not be able to create deliverer with fields that have more characters than necessary', async () => {
     try {
-      await factory.create('Deliverer', {
+      await DelivererService.create({
         name: 'a'.repeat(51),
       });
       expect(true).toBe(false);
