@@ -2,4 +2,4 @@
 Dockerfile
 .dockerignore
 docker-compose.yml
-package-lock
+package-lock.json
