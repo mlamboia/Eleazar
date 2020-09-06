@@ -5,6 +5,7 @@ const ProductService = require('../../src/service/product_service');
 describe('Product', () => {
   beforeAll(async () => {
     await db.connect();
+    await db.truncate();
   });
 
   beforeEach(async () => {

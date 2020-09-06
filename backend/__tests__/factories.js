@@ -11,7 +11,7 @@ factory.define('Client', Client, {
   city: faker.address.city(),
   neighborhood: faker.address.streetName(),
   address: faker.address.streetAddress(),
-  phone: faker.random.number({ min: 900000000, max: 999999999 }),
+  phone: faker.phone.phoneNumberFormat(3),
   deliverer_fee: faker.random.number({ min: 0, max: 10 }),
 });
 
@@ -20,20 +20,18 @@ factory.define('Deliverer', Deliverer, {
 });
 
 factory.define('Order', Order, {
-  products: {
-    type: [
-      {
-        quantity: faker.random.number({ min: 0, max: 10 }),
-        product_name: faker.commerce.productName(),
-        unit_price: faker.random.number({ min: 10, max: 30 }),
-      },
-      {
-        quantity: faker.random.number({ min: 0, max: 10 }),
-        product_name: faker.commerce.productName(),
-        unit_price: faker.random.number({ min: 10, max: 30 }),
-      },
-    ],
-  },
+  products: [
+    {
+      quantity: faker.random.number({ min: 0, max: 10 }),
+      product_name: faker.commerce.productName(),
+      unit_price: faker.random.number({ min: 10, max: 30 }),
+    },
+    {
+      quantity: faker.random.number({ min: 0, max: 10 }),
+      product_name: faker.commerce.productName(),
+      unit_price: faker.random.number({ min: 10, max: 30 }),
+    },
+  ],
 });
 
 factory.define('Product', Product, {

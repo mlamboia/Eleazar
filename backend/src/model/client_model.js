@@ -1,10 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const {
-  maxLength,
-  minLength,
-  isLength,
-} = require('../helper/custom_validators');
+const { maxLength, minLength } = require('../helper/custom_validators');
 
 const Client = new Schema(
   {
@@ -53,7 +49,6 @@ const Client = new Schema(
     orders: [
       {
         type: Schema.Types.ObjectId,
-        validate: isLength(24, 'Digite um id de pedido válido!'),
         ref: 'orders',
       },
     ],

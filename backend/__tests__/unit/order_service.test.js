@@ -6,6 +6,7 @@ const OrderService = require('../../src/service/order_service');
 describe('Client', () => {
   beforeAll(async () => {
     await db.connect();
+    await db.truncate();
   });
 
   beforeEach(async () => {
@@ -73,29 +74,24 @@ describe('Client', () => {
     }
   });
 
-  // it('should not be able to create deliverer with fields that have less characters than necessary', async () => {
-  //   try {
-  //     await DelivererService.create({
-  //       name: 'aaa',
-  //     });
-  //     expect(true).toBe(false);
-  //   } catch (e) {
-  //     expect(e.errors.name.properties.message).toBe(
-  //       'O nome do entregador deve possuir mais de 4 caracteres!'
-  //     );
-  //   }
-  // });
+  it('should be able to update a order', async () => {
+    const { client, deliverer, product } = this;
 
-  // it('should not be able to create deliverer with fields that have more characters than necessary', async () => {
-  //   try {
-  //     await DelivererService.create({
-  //       name: 'a'.repeat(51),
-  //     });
-  //     expect(true).toBe(false);
-  //   } catch (e) {
-  //     expect(e.errors.name.properties.message).toBe(
-  //       'O nome do entregador deve possuir menos de 50 caracteres!'
-  //     );
-  //   }
-  // });
+    const order = await OrderService.create({
+      client: client._id,
+      deliverer: deliverer._id,
+      products: [
+        {
+          quantity: 2,
+          product_name: product.name,
+          unit_price: product.unit_price,
+        },
+        {
+          quantity: 3,
+          product_name: product.name,
+          unit_price: product.unit_price,
+        },
+      ],
+    });
+  });
 });

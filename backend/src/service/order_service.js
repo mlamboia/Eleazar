@@ -8,35 +8,51 @@ class OrderService {
     await this.addOrderTotalPrice(order);
     await this.addOrderProductsTotalPrice(order);
     await order.save();
-    await this.findAndUpdateClientWithOrder(order._doc);
+    await this.findAndUpdateClientWithOrder(order);
     return order;
   }
 
   async addOrderTotalPrice(order) {
-    const totalPrice = await order.products.reduce((acc, cur) => {
-      return acc + cur.unit_price * cur.quantity;
-    }, 0);
-    order.order_total_price = totalPrice;
+    try {
+      const totalPrice = await order.products.reduce((acc, cur) => {
+        return acc + cur.unit_price * cur.quantity;
+      }, 0);
+      order.order_total_price = await totalPrice;
+    } catch (e) {
+      console.error(e);
+    }
   }
 
   async addOrderTotalQuantity(order) {
-    const totalQuantity = await order.products.reduce((acc, cur) => {
-      return acc + cur.quantity;
-    }, 0);
-    order.products_total_quantity = totalQuantity;
+    try {
+      const totalQuantity = await order.products.reduce((acc, cur) => {
+        return acc + cur.quantity;
+      }, 0);
+      order.products_total_quantity = await totalQuantity;
+    } catch (e) {
+      console.error(e);
+    }
   }
 
   async addOrderProductsTotalPrice(order) {
-    await order.products.reduce(async (acc, cur) => {
-      const productsTotalPrice = (await cur.unit_price) * cur.quantity;
-      cur.products_total_price = productsTotalPrice;
-    }, 0);
+    try {
+      await order.products.reduce(async (acc, cur) => {
+        const productsTotalPrice = (await cur.unit_price) * cur.quantity;
+        cur.products_total_price = await productsTotalPrice;
+      }, 0);
+    } catch (e) {
+      console.error(e);
+    }
   }
 
   async findAndUpdateClientWithOrder(order) {
-    const client = await Client.findOne({ _id: order.client });
-    client.orders.push(order._id);
-    await client.save();
+    try {
+      const client = await Client.findOne({ _id: order.client });
+      await client.orders.push(order._id);
+      await client.save();
+    } catch (e) {
+      console.error(e);
+    }
   }
 
   async update(id, body) {
@@ -53,7 +69,7 @@ class OrderService {
       .exec();
   }
 
-  async findOrders(id) {
+  async findOrders() {
     return await Order.find({})
       .populate('client', 'id name neighborhood address deliverer_fee phone')
       .populate('deliverer', 'id name')

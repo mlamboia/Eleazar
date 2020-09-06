@@ -16,15 +16,6 @@ const maxLength = function (maxLength, message) {
   };
 };
 
-const isLength = function (isLength, message) {
-  return {
-    validator: function (value) {
-      return value.length != isLength;
-    },
-    message: message,
-  };
-};
-
 const valueIsArray = function (message) {
   return {
     validator: function (value) {
@@ -34,4 +25,4 @@ const valueIsArray = function (message) {
   };
 };
 
-module.exports = { minLength, maxLength, isLength, valueIsArray };
+module.exports = { minLength, maxLength, valueIsArray };
