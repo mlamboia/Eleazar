@@ -93,5 +93,22 @@ describe('Client', () => {
         },
       ],
     });
+
+    const body = {
+      products: [
+        {
+          quantity: 1,
+          product_name: product.name,
+          unit_price: product.unit_price,
+        },
+      ],
+    };
+
+    const updatedOrder = await OrderService.update(order._id, body);
+
+    expect(updatedOrder.products.length).toBe(1);
+    expect(updatedOrder.products[0].quantity).toBe(1);
+    expect(updatedOrder.products[0].product_name).toBe(product.name);
+    expect(updatedOrder.products[0].unit_price).toBe(product.unit_price);
   });
 });
